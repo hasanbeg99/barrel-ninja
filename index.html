@@ -31,6 +31,14 @@
   .overlay { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
     padding: calc(env(safe-area-inset-top) + 16px) 18px calc(env(safe-area-inset-bottom) + 16px); text-align:center; pointer-events:none; }
   .hidden { display:none !important; }
+  .overlay { overflow-y:auto; justify-content:safe center; }
+  #rotate { display:none; position:fixed; inset:0; z-index:50; background:#05070F; color:#F3E9D2; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; font-family:var(--f-num); padding:20px; }
+  #rotate .ph { width:44px; height:72px; border:4px solid #F3E9D2; border-radius:10px; animation: rot 1.8s ease-in-out infinite; }
+  #rotate p { font-size:18px; margin:0; } #rotate small { font-family:inherit; opacity:.7; font-size:13px; }
+  @keyframes rot { 0%,30% { transform:rotate(90deg); } 60%,100% { transform:rotate(0deg); } }
+  @media (orientation:landscape) and (max-height:500px) { #rotate { display:flex; } }
+  #hudCenter { transition: opacity .25s; } #hudCenter.dim { opacity:.3; }
+  #over .row .btn { transition: opacity .2s; } #over.lock .row .btn { opacity:.45; }
   .overlay button, .overlay .card, .overlay .interactive { pointer-events:auto; }
   .dim { background: radial-gradient(ellipse at 50% 40%, rgba(5,7,15,.25), rgba(5,7,15,.8)); }
   .title { font-family:var(--f-title); font-size: clamp(40px, 12.5vw, 64px); line-height:.95; margin:0; letter-spacing:1px; color:var(--text);
@@ -44,12 +52,12 @@
   .howto li { display:flex; gap:10px; align-items:flex-start; margin:7px 0; }
   .howto .k { flex:0 0 auto; min-width:30px; height:24px; border-radius:7px; background:rgba(79,240,255,.12); border:1px solid rgba(79,240,255,.45);
     color:var(--cyan); font-family:var(--f-num); font-size:13px; display:flex; align-items:center; justify-content:center; padding:0 5px; }
-  .howto .k.red { background:rgba(226,40,60,.15); border-color:rgba(226,40,60,.6); color:#ff7584; }
+  .howto .k.red { background:rgba(226,40,60,.15); border-color:rgba(226,40,60,.6); color:#EC7380; }
   .best { margin-top:12px; font-size:14px; opacity:.85; font-weight:600; }
   .best b { font-family:var(--f-num); font-weight:400; color:var(--gold); }
   .row { display:flex; gap:10px; margin-top:16px; justify-content:center; flex-wrap:wrap; }
   .btn { border:0; border-radius:14px; padding:12px 22px; font-family:var(--f-body); font-size:17px; font-weight:700; color:#fff; cursor:pointer;
-    background: linear-gradient(180deg,#ff4a5c, var(--red) 55%, #a8152a); box-shadow: 0 6px 18px rgba(226,40,60,.45), inset 0 -3px 0 rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.3); }
+    background: linear-gradient(180deg,#E2283C,#A81D2E); box-shadow: 0 6px 18px rgba(226,40,60,.45), inset 0 -3px 0 rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.3); }
   .btn.ghost { background: rgba(255,255,255,.07); box-shadow: inset 0 0 0 1.5px rgba(244,241,234,.28); font-weight:600; }
   .btn.small { font-size:14px; padding:9px 14px; }
   .btn:active { transform: translateY(2px) scale(.98); }
@@ -57,7 +65,7 @@
   .stats { display:grid; grid-template-columns: 1fr 1fr; gap: 8px 18px; margin: 6px 0 2px; }
   .stats .lbl { font-size:11px; letter-spacing:2px; text-transform:uppercase; opacity:.7; font-weight:600; }
   .stats .val { font-family:var(--f-num); font-size:30px; }
-  .reason { margin:-4px 0 10px; color:#ff7584; font-weight:700; font-size:15px; }
+  .reason { margin:-4px 0 10px; color:#EC7380; font-weight:700; font-size:15px; }
   .newbest { color:var(--cyan); font-weight:700; margin-top:8px; text-shadow:0 0 10px rgba(79,240,255,.7); }
   #hud { position:absolute; left:0; right:0; top: calc(env(safe-area-inset-top) + 8px); height:0; pointer-events:none; }
   #hudLeft { position:absolute; left:10px; top:0; display:flex; flex-direction:column; gap:6px; align-items:flex-start; }
@@ -67,7 +75,22 @@
   #depthBest { font-size:11px; opacity:.7; font-weight:600; letter-spacing:1px; margin-top:3px; text-shadow:0 1px 4px #000; }
   .pill { background: var(--panel); border:1.5px solid rgba(226,40,60,.75); border-radius: 12px; padding:5px 9px; font-weight:700; font-size:13px; display:flex; align-items:center; gap:6px; color:var(--text); }
   .pill .num { font-family:var(--f-num); font-weight:400; font-size:16px; }
-  #combo { color:var(--cyan); font-family:var(--f-num); font-size:14px; }
+  #combo { color:var(--cyan); font-family:var(--f-num); font-size:15px; display:inline-block; transition: transform .12s; }
+  #combo.pop { transform: scale(1.45); }
+  #combo.t2 { color:#4FF0FF; } #combo.t3 { color:#FFB347; } #combo.t4, #combo.t5 { color:#FF5A6E; }
+  #comboBar { width:100%; height:3px; border-radius:2px; background:rgba(244,241,234,.12); overflow:hidden; margin-top:-3px; }
+  #comboBar i { display:block; height:100%; width:100%; background:var(--cyan); transform-origin:left center; }
+  #depthBest.near { color:var(--cyan); opacity:1; font-size:13px; text-shadow:0 0 8px rgba(79,240,255,.7), 0 1px 4px #000; }
+  #depthBest.rec { color:var(--gold); opacity:1; font-size:13px; }
+  .missions { list-style:none; padding:0; margin:8px 0 0; text-align:left; font-size:13px; line-height:1.3; }
+  .missions li { display:flex; gap:8px; align-items:center; margin:5px 0; }
+  .missions .mk { flex:0 0 18px; height:18px; border-radius:5px; border:1.5px solid rgba(79,240,255,.5); color:var(--cyan); font-size:12px; display:flex; align-items:center; justify-content:center; }
+  .missions li.done .mk { background:var(--cyan); color:#05070F; }
+  .missions .mt { flex:1; } .missions .mp { font-family:var(--f-num); font-size:12px; opacity:.8; white-space:nowrap; }
+  .missions .mr { font-family:var(--f-num); font-size:12px; color:var(--gold); white-space:nowrap; }
+  .mhead { font-size:11px; letter-spacing:2px; text-transform:uppercase; opacity:.7; font-weight:600; margin-top:12px; text-align:left; }
+  .chase { color:var(--cyan); font-weight:700; margin:8px 0 0; font-size:14px; }
+  .tapHint { margin-top:10px; font-size:12px; opacity:.6; }
   .iconbtn { pointer-events:auto; width:40px; height:40px; border-radius:12px; background:var(--panel); border:2px solid var(--red); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
   .iconbtn svg { width:20px; height:20px; fill:var(--text); }
   .bicon { width:14px; height:16px; border-radius:4px/6px; background: linear-gradient(90deg,#5A3518,#A8743F 50%,#5A3518); position:relative; }
@@ -87,9 +110,10 @@
 <div id="wrap"><div id="stage">
   <canvas id="game"></canvas>
 
+  <div id="rotate" aria-live="polite"><div class="ph"></div><p>Bitte Gerät hochkant drehen</p><small>Barrel Ninja spielt sich nur im Hochformat</small></div>
   <div id="hud" class="hidden">
     <div id="hudLeft">
-      <div class="pill"><span class="num" id="score">0</span><span id="combo"></span></div>
+      <div class="pill" style="flex-direction:column;align-items:stretch;gap:4px"><div style="display:flex;gap:6px;align-items:center"><span class="num" id="score">0</span><span id="combo"></span></div><div id="comboBar" class="hidden"><i id="comboFill"></i></div></div>
       <div class="pill" id="barrelPill"><span class="bicon" id="bicon"></span><span id="barrelTxt">Fass</span></div>
       <div class="pill"><span class="coin"></span><span class="num" id="coins" style="font-size:13px">0</span></div>
     </div>
@@ -106,12 +130,13 @@
     <div class="card" style="margin-top:22px">
       <ul class="howto">
         <li><span class="k">↔</span><span>Wische irgendwo: Der Ninja schwingt zur Seite und pendelt zurück.</span></li>
-        <li><span class="k">↕</span><span>Hoch = Seil kürzer, runter = Seil länger. Kombinieren oder schräg wischen für die Ecken.</span></li>
+        <li><span class="k">↕</span><span>Hoch = Seil kürzer, runter = Seil länger. Wisch in eine Richtung – Ecken mit zwei Wischern.</span></li>
         <li><span class="k">⚔</span><span>Wisch seitlich zu einem Gegner = Schwerthieb.</span></li>
         <li><span class="k red">!</span><span>Der Kobold schneidet dein Seil: <b>nach oben wischen!</b></span></li>
         <li><span class="k">▣</span><span>Das Fass hält einen Treffer aus. Danach bist du schneller, aber verwundbar.</span></li>
       </ul>
     </div>
+    <div class="card" style="margin-top:10px;padding:12px 18px"><div class="mhead" style="margin-top:0">Missionen · <span style="color:var(--gold)">🪙 <span id="menuCoins">0</span></span></div><ul class="missions" id="menuMissions"></ul></div>
     <div class="best">Bestwert: <b id="menuBest">0</b> · Tiefster Abstieg: <b id="menuDepth">0 m</b></div>
     <div class="row">
       <button class="btn" id="playBtn">Spielen</button>
@@ -142,10 +167,13 @@
         <div><div class="lbl">Münzen</div><div class="val" id="overCoins">0</div></div>
       </div>
       <div id="newBest" class="newbest hidden">★ Neuer Rekord! ★</div>
+      <div id="overChase" class="chase hidden"></div>
+      <div class="mhead">Missionen</div><ul class="missions" id="overMissions"></ul>
       <div class="row">
         <button class="btn" id="againBtn">Nochmal</button>
         <button class="btn ghost" id="overMenuBtn">Menü</button>
       </div>
+      <div class="tapHint">Tippen oder wischen = nochmal</div>
     </div>
   </div>
 
@@ -155,6 +183,9 @@
   </div>
   <div class="toast" id="toast"></div>
 </div></div>
+<script src="vfx/vfx.js"></script>
+<script src="vfx/ninja-anim.js"></script>
+<script src="vfx/enemy-anim.js"></script>
 <script>
 (() => {
 'use strict';
@@ -164,46 +195,69 @@
    Mirrors design/balancing-spec.json v0.2 (keys 1:1 where possible).
    Times in ms, depth in m. See design/BALANCE_KEYS.md.
    ===================================================================== */
+const BUILD = 'v0.3-wellen';   // Build-Marker (Deploy-Check)
 const BALANCE = {
-  version: '0.2',
+  version: '0.3',
   world: { metersPerScreen: 10, rowMeters: 1.5 },            // 1 screen (800 units) = 10 m → 80 units/m, 1 row = 120 units
   grid: {
-    moveDurationMs: { barrel: 110, noBarrel: 80 },
-    returnDelayMs: { barrel: 700, noBarrel: 600 },
-    returnDurationMs: 140,
+    moveDurationMs: { barrel: 95, noBarrel: 75 },
+    moveOvershoot: 0.6,            // (v0.3) easeOutBack-Faktor beim Hinschwingen (0 = easeOutCubic)
+    returnDelayMs: { barrel: 560, noBarrel: 460 },
+    returnDurationMs: 170,
+    returnOvershoot: 1.25,
     returnHoldIfRestCellThreatened: true,
-    comboHoldSyncPct: 0.8,         // (impl.) 2nd axis input refreshes the other axis' hold to ≥ 80 % so corners are reachable
-    swipeMinDp: 28, swipeMaxMs: 260, diagonalSectorDeg: 0, inputBufferMs: 120
+    comboHoldSyncPct: 1.0,         // 2nd axis input refreshes the other axis' hold → beide Achsen pendeln gemeinsam zurück
+    cornerMergeMs: 150,            // (v0.3) zwei Wischer innerhalb dieses Fensters = eine Eckbewegung (gemeinsames Ankommen, ein Swipe-Sound)
+    swipeMinDp: 24,                // erster Wischer eines Strichs (CSS-px)
+    chainSwipeMinDp: 18,           // weitere Richtungswechsel im selben Strich
+    swipeAnchorResetStillMs: 120,  // Finger ruht so lange (< 15 px/s) → neuer Ankerpunkt, gleiche Richtung wieder erlaubt
+    sameDirNeedsPause: true,       // gleiche Richtung im selben Strich nur nach kurzer Ruhe (kein Doppel-Auslösen)
+    flickFallbackMinDp: 16, flickFallbackMaxMs: 320,   // pointerup: kurzer Flick, der unter swipeMinDp blieb, zählt trotzdem
+    axisBiasHorizontal: 1.15,      // 45°-Wischer → horizontal (Angriff)
+    inputBufferMs: 90
   },
-  attack: { reachCells: 1, activeMs: 120, recoveryMs: { barrel: 160, noBarrel: 110 }, hitStopMs: 50 },
+  attack: { reachCells: 1, activeMs: 150, recoveryMs: { barrel: 60, noBarrel: 40 }, hitStopMs: 50,
+    slashBufferMs: 250,            // (v0.3) Hieb während Cooldown wird gepuffert statt verschluckt
+    cancelRecoveryOnReverse: true  // Gegenrichtung bricht Erholung/Hieb sofort ab (L-R-L-Ketten)
+  },
+  perf: { maxDpr: 2, lowDpr: 1.5, downgradeP95Ms: 22, upgradeP95Ms: 14, hudUpdateMs: 100, maxDtMs: 100 },
   scroll: { speedMps: { start: 0.8, perMeter: 0.0035, max: 2.2 }, noBarrelSpeedMult: 1.0 },
   behaviour: {
-    attackGapMs: { start: 1600, perMeter: -2.25, min: 700 },
+    attackGapMs: { start: 1300, perMeter: -1.5, min: 700 },
     windupMs: { start: 900, perMeter: -1.125, min: 450 },
-    maxConcurrentAttacks: [ { fromM: 0, value: 1 }, { fromM: 40, value: 2 }, { fromM: 150, value: 3 }, { fromM: 300, value: 4 } ],
+    maxConcurrentAttacks: [ { fromM: 0, value: 1 }, { fromM: 30, value: 2 }, { fromM: 150, value: 3 }, { fromM: 300, value: 4 } ],
     blockedIdleExtendMs: 300,      // fairness.decisionsQueue
     maxBlockedRetries: 8,          // (impl.) after that the enemy gives up and scrolls away
     rowPick: { top: 1, mid: 1.3, bottom: 1, pass: 0.15 }   // (impl.) which grid row a wall enemy settles on; pass = scrolls by without settling
   },
-  wallDensity: [ { fromM: 0, value: 1 }, { fromM: 60, value: 2 }, { fromM: 200, value: 3 } ],   // wall enemies per screen (10 m) per wall
+  wallDensity: [ { fromM: 0, value: 2.4 }, { fromM: 40, value: 2.5 }, { fromM: 150, value: 3 } ],   // wall enemies per screen (10 m) per wall
+  // (v0.3) Heißer Start: 3 Gegner liegen schon bereit, erste Bedrohung nach ~1,5 s
+  opening: { hotStart: true, preplaced: [ { side: 1, row: 0, y: 350, idleMs: 400 }, { side: -1, row: 0, y: 520, idleMs: 500 }, { side: 1, row: -1, y: 700, idleMs: 600 } ], firstCoinsM: 1.5 },
+  // (v0.3) Wellen mit Atempausen: aktiv → Pause (keine neuen Angriffe, Münzen) → aktiv …
+  waves: { activeMs: [ { fromM: 0, value: 8000 }, { fromM: 100, value: 11000 }, { fromM: 250, value: 14000 } ],
+    restMs: [ { fromM: 0, value: 3000 }, { fromM: 100, value: 2500 }, { fromM: 250, value: 2000 } ],
+    gapMultStart: 1.35, gapMultEnd: 0.7, restScrollMult: 0.9, surgeEvery: 5, surgeGapMult: 0.8, surgeBonus: 250 },
+  // (v0.3) Ab 400 m alle 100 m eine Stufe härter (Telegraph bleibt ≥ 450 ms)
+  escalation: { fromM: 400, everyM: 100, concurrentPlus: 1, concurrentCap: 5, waveActivePlusMs: 1000, waveRestMinusMs: 250, waveRestMinMs: 1200,
+    attackGapMinusMs: 50, attackGapMinMs: 500 },
   enemies: {
-    krabbler: { fromM: 0, hp: 1, points: 10, idleMs: [400, 1200],
+    krabbler: { fromM: 0, hp: 1, points: 25, idleMs: [400, 1200],
       attacks: {
         jab:  { weight: 70, durationMs: 250, reachCols: 2, recoverMs: 500 },
         leap: { weight: 30, fromM: 60, windupBonusMs: 100, crossMs: { start: 1100, min: 800 }, landsOnOppositeWall: true }
       } },
-    fledermaus: { fromM: 50, hp: 1, points: 20, idleMs: [600, 1500],
+    fledermaus: { fromM: 50, hp: 1, points: 40, idleMs: [600, 1500],
       attacks: {
         cross: { weight: 75, crossMs: { start: 1400, perMeter: -1.25, min: 900 }, sineAmplitudeRows: 0.3, hitsOnlyOwnRow: true },
         swoop: { weight: 25, fromM: 200, windupBonusMs: 150, crossMs: 1100, rowChange: 1 }
       } },
-    seilschneider: { fromM: 90, hp: 1, points: 50, descendMs: { start: 2600, min: 1800 }, cutMs: { start: 2200, min: 1600 },
+    seilschneider: { fromM: 90, hp: 1, points: 100, descendMs: { start: 2600, min: 1800 }, cutMs: { start: 2200, min: 1600 },
       rampToM: 400,                // (impl.) start→min interpolated linearly between fromM and rampToM
-      vulnerableFromDescendPct: 0.5, cooldownMs: 10000, maxConcurrent: 1 },
+      vulnerableFromDescendPct: 0.5, cooldownMs: 10000, maxConcurrent: 1, countsAsActiveAttack: true },
     stacheln: { fromM: 20, lengthCols: [ { fromM: 20, value: 1 }, { fromM: 180, value: 2, chance: 0.3 } ], heightRows: [1, 2] },
-    beisspflanze: { fromM: 160, hp: 1, points: 30, crackMs: { start: 900, min: 600 }, rampToM: 400, biteMs: 200, stayMs: 900, retractMs: 300,
+    beisspflanze: { fromM: 160, hp: 1, points: 60, crackMs: { start: 900, min: 600 }, rampToM: 400, biteMs: 200, stayMs: 900, retractMs: 300,
       centerFromM: 220, maxConcurrent: 1, cooldownMs: 3500 },
-    spuckpflanze: { fromM: 300, hp: 1, points: 40, crackMs: 900, aimMs: 500, projectileMs: 450, stayMs: 1800, retractMs: 300, maxConcurrent: 1, cooldownMs: 3500 }
+    spuckpflanze: { fromM: 300, hp: 1, points: 80, crackMs: 900, aimMs: 500, projectileMs: 450, stayMs: 1800, retractMs: 300, maxConcurrent: 1, cooldownMs: 3500 }
   },
   spawnWeights: [
     { fromM: 0,   krabbler: 100, stacheln: 0,  fledermaus: 0,  seilschneider: 0,  beisspflanze: 0,  spuckpflanze: 0 },
@@ -219,17 +273,28 @@ const BALANCE = {
     alwaysOneSafeCellReachableInOneSwipe: true,
     neverAllThreeCellsOfARowBlocked: true,
     noBackWallInTopRowWhileCutterActive: true,
+    keepTopRowFreeWhileCutterVulnerable: true,   // (v0.3) solange der Seilschneider angreifbar ist, keine neuen Angriffe auf die obere Reihe
+    minWindupCornerOnlyMs: 700,                   // (v0.3) nur Ecke als Ausweg (= 2 Wischer) erst ab diesem Ausholen
     noBackWallInCellNinjaJustLeftWithinMs: 400,
     spikeLookAheadMs: 500           // (impl.) spikes count as "threatening" a cell this long before they reach it
   },
   score: {
     pointsPerMeter: 10,
-    combo: { windowMs: 2500, stepMult: 0.25, maxMult: 3.0, resetOnHit: true },
-    milestones: [ { m: 100, bonus: 500 }, { m: 250, bonus: 1000 }, { m: 400, bonus: 2000 } ],
+    // (v0.3) Combo-Stufen: Multiplikator gilt für ALLE Punkte (auch Tiefe). Timer läuft ab → eine Stufe runter. Treffer → zurück auf x1
+    combo: { tiers: [ { streak: 0, mult: 1 }, { streak: 3, mult: 1.5 }, { streak: 6, mult: 2 }, { streak: 10, mult: 3 }, { streak: 15, mult: 4 }, { streak: 22, mult: 5 } ],
+      windowMs: [ 3500, 3500, 3300, 3100, 2900, 2700 ], maxMult: 5, onTimeout: 'dropTier', resetOnHit: true, appliesToDepth: true, pitchPerStreak: true },
+    nearMiss: { lateDodgeMs: 220, points: 25, comboRefillPct: 0.4 },     // Angriffsfeld kurz vor dem Einschlag verlassen
+    counter: { lastWindupMs: 250, mult: 1.5 },                           // Kill in den letzten ms des Ausholens
+    multiKill: { withinMs: 160, bonusPerExtra: 100 },
+    milestones: [ { m: 25, bonus: 100 }, { m: 50, bonus: 150 }, { m: 100, bonus: 300 }, { m: 150, bonus: 400 }, { m: 200, bonus: 500 }, { m: 300, bonus: 750 }, { m: 400, bonus: 1000 } ],   // (v0.3) kleiner, dafür × Combo
+    milestoneEveryMAfter: 100, milestoneBonusPerM: 2.5,
     noBarrelScoreMult: 1.5
   },
+  record: { markerWithinM: 10, hudCountdownWithinM: 30, chaseHintPct: 0.7 },
+  gameOver: { slowMoMs: 300, slowMoScale: 0.3, cardDelayMs: 600, inputLockAfterCardMs: 400 },   // Sperre zählt ab Erscheinen der Karte (Panik-Taps)
+  missions: { active: 3 },
   barrel: { invulnAfterBurstMs: 1000,
-    pickup: { minDepthAfterBurstM: 60, minSpacingM: 100, chancePer10m: 0.25, onlyWhenNoBarrel: true, stayMs: 4000 } },
+    pickup: { minDepthAfterBurstM: 20, minSpacingM: 50, chancePer10m: 0.5, pityAfterM: 45, onlyWhenNoBarrel: true, stayMs: 4500, targetNinjaRow: true } },
   pickups: { coins: { avgEveryM: 4, chainLength: 5, chainBonusCoins: 5, placeOnlyInSafeCells: true, chainSpacingM: 0.6 } },
   tutorial: {
     firstRunOnly: true, skippable: true, noDamageUntilMs: 30000, scrollMps: 0.6,
@@ -272,6 +337,69 @@ const Store = {
   save() { try { localStorage.setItem(this.key, JSON.stringify(this.data)); } catch(e){} }
 };
 Store.load();
+if (!Store.data.stats) Store.data.stats = { runs:0 };
+
+/* ===================================================================== MISSIONEN (v0.3)
+   3 aktive Aufgaben mit Münz-Belohnung. "run" = innerhalb eines Laufs, sonst über alle Läufe summiert.
+   Erledigte Missionen werden beim nächsten Lauf durch die nächste aus dem Pool ersetzt. */
+const MISSION_POOL = [
+  { id:'k10',    txt:'Besiege 10 Krabbler',               stat:'kill_krabbler', n:10,   reward:20 },
+  { id:'d50',    txt:'Erreiche 50 m',                     stat:'depth', run:true, n:50, reward:15 },
+  { id:'b80',    txt:'80 m ohne das Fass zu verlieren',   stat:'barrelDepth', run:true, n:80, reward:30 },
+  { id:'c2',     txt:'Erreiche Combo x2',                 stat:'mult', run:true, n:2,   reward:25 },
+  { id:'nm2',    txt:'Weiche 2× knapp aus',               stat:'nearMiss', n:2,  reward:25 },
+  { id:'kill25', txt:'Besiege 25 Gegner',                 stat:'kills', n:25,    reward:25 },
+  { id:'chain2', txt:'Sammle 2 volle Münzketten',         stat:'chain', n:2,     reward:20 },
+  { id:'co2',    txt:'2 Konter (Treffer beim Ausholen)',  stat:'counter', n:2,   reward:30 },
+  { id:'b150',   txt:'150 m ohne das Fass zu verlieren',  stat:'barrelDepth', run:true, n:150, reward:60 },
+  { id:'bat8',   txt:'Besiege 8 Fledermäuse',             stat:'kill_fledermaus', n:8, reward:30 },
+  { id:'d150',   txt:'Erreiche 150 m',                    stat:'depth', run:true, n:150, reward:40 },
+  { id:'s5k',    txt:'5000 Punkte in einem Lauf',         stat:'score', run:true, n:5000, reward:40 },
+  { id:'cut2',   txt:'Besiege 2 Seilschneider',           stat:'kill_seilschneider', n:2, reward:40 },
+  { id:'fass1',  txt:'Hol dir ein Fass zurück',           stat:'barrelBack', n:1, reward:30 },
+  { id:'c3',     txt:'Erreiche Combo x3',                 stat:'mult', run:true, n:3,   reward:50 },
+  { id:'runs5',  txt:'Spiele 5 Läufe',                    stat:'runs', n:5,      reward:20 },
+  { id:'d250',   txt:'Erreiche 250 m',                    stat:'depth', run:true, n:250, reward:60 },
+  { id:'kill80', txt:'Besiege 80 Gegner',                 stat:'kills', n:80,    reward:60 },
+  { id:'s15k',   txt:'15000 Punkte in einem Lauf',        stat:'score', run:true, n:15000, reward:80 },
+  { id:'c5',     txt:'Erreiche Combo x5',                 stat:'mult', run:true, n:5,   reward:100 }
+];
+const Missions = {
+  get st() {
+    let m = Store.data.missions;
+    if (!m || !Array.isArray(m.active)) m = Store.data.missions = { active:['k10','d50','b80'], prog:{}, done:[], next:3 };
+    return m;
+  },
+  def(id) { return MISSION_POOL.find(d => d.id === id); },
+  list() { const m = this.st; return m.active.map(id => { const d = this.def(id); return d && { ...d, prog: Math.min(d.n, Math.floor(m.prog[id] || 0)), done: m.done.includes(id) }; }).filter(Boolean); },
+  refresh() {   // erledigte gegen neue tauschen (beim Laufstart)
+    const m = this.st; if (!m.done.length) return;
+    m.active = m.active.map(id => {
+      if (!m.done.includes(id)) return id;
+      delete m.prog[id];   // erledigte Mission vergessen → kann später wieder drankommen
+      for (let i = 0; i < MISSION_POOL.length; i++) { const d = MISSION_POOL[(m.next + i) % MISSION_POOL.length];
+        if (!m.active.includes(d.id) && d.id !== id) { m.next = (m.next + i + 1) % MISSION_POOL.length; delete m.prog[d.id]; return d.id; } }
+      return id;
+    });
+    m.done = []; Store.save();
+  },
+  _apply(stat, fn) {
+    const m = this.st;
+    for (const id of m.active) {
+      const d = this.def(id); if (!d || d.stat !== stat || m.done.includes(id)) continue;
+      const before = m.prog[id] || 0, v = fn(before, d); if (v === before) continue;
+      m.prog[id] = v;
+      if (v >= d.n) { m.done.push(id); Store.data.coins += d.reward; Store.save();
+        if (G.state === 'play') { UI.toast('Mission geschafft! +' + d.reward); AudioMgr.play('barrel_pickup', { vol:0.7 }); burst(N.x, N.y - 40, 10, ['#FFE2A8','#FFB347'], 160); } }
+    }
+  },
+  add(stat, n = 1) { this._apply(stat, (v, d) => d.run ? v : v + n); },
+  runMax(stat, val) { this._apply(stat, (v, d) => d.run && val > v ? val : v); },
+  render(el) {
+    el.innerHTML = this.list().map(d => `<li class="${d.done ? 'done' : ''}"><span class="mk">${d.done ? '✓' : ''}</span><span class="mt">${d.txt}</span>` +
+      `<span class="mp">${d.done ? '' : (d.prog + '/' + d.n)}</span><span class="mr">+${d.reward}</span></li>`).join('');
+  }
+};
 const Loadout = {
   get outfit() { return OUTFITS.find(o => o.id === Store.data.loadout.outfit) || OUTFITS[0]; },
   get weapon() { return WEAPONS.find(o => o.id === Store.data.loadout.weapon) || WEAPONS[0]; },
@@ -307,8 +435,9 @@ const AUDIO_EXTS = (() => {
         if (a.canPlayType('audio/mpeg')) out.push('mp3'); } catch(e) {}
   return out.length ? out : ['m4a', 'mp3'];
 })();
+const AUDIO_PRIO = ['swipe', 'sword_slash', 'enemy_hit', 'enemy_death', 'barrel_break', 'player_hit', 'ui_confirm', 'ui_click', 'score_pickup', 'warning'];
 const AudioMgr = {
-  ctx:null, master:null, sfxBus:null, musicBus:null, specs:{}, bytes:{}, buffers:{}, decoding:{}, unlocked:false,
+  ctx:null, master:null, sfxBus:null, musicBus:null, specs:{}, bytes:{}, buffers:{}, decoding:{}, used:{}, unlocked:false,
   loops:{}, music:{ cur:null, tier:0, want:-1 }, lastCreak:0, ready:null,
   get muted() { return Store.data.muted; },
   // Start fetching files right away (no AudioContext before a user gesture → no autoplay warnings).
@@ -319,14 +448,17 @@ const AudioMgr = {
       for (const [n, d] of Object.entries(SOUND_DEFAULTS)) this.specs[n] = { src:n, ...d };
       for (const [n, s] of Object.entries(files)) this.specs[n] = { ...(this.specs[n] || {}), ...(typeof s === 'string' ? { src:s } : s), vol: (s && s.volume != null) ? s.volume : (this.specs[n] ? this.specs[n].vol : 1) };
       const order = Object.keys(this.specs).sort((a, b) => (this.specs[a].loop ? 1 : 0) - (this.specs[b].loop ? 1 : 0) || (a.startsWith('music') && a !== 'music_calm_loop') - (b.startsWith('music') && b !== 'music_calm_loop'));
+      // Steuerungs-Sounds zuerst (parallel laden + zuerst dekodieren), damit schon die ersten Wischer Ton haben; Musik zuletzt
+      const prio = AUDIO_PRIO.filter(n => this.specs[n]);
+      await Promise.all(prio.map(n => this.fetchBytes(n).then(() => { if (this.ctx) return this.decode(n); })));
+      for (const n of order) if (!prio.includes(n)) { await this.fetchBytes(n); if (this.ctx) this.decode(n); }
       this.precacheHint(order);
-      for (const n of order) { await this.fetchBytes(n); if (this.ctx) this.decode(n); }
     })();
   },
   urlsFor(n) { const s = this.specs[n].src; return /\.[a-z0-9]+$/i.test(s) ? ['audio/' + s] : AUDIO_EXTS.map(e => `audio/${s}.${e}`); },
   async fetchBytes(n) {
     for (const u of this.urlsFor(n)) {
-      try { const r = await fetch(u); if (!r.ok) continue; this.bytes[n] = { ab: await r.arrayBuffer(), url:u }; return; } catch(e) {}
+      try { const r = await fetch(u); if (!r.ok) continue; this.bytes[n] = { ab: await r.arrayBuffer(), url:u }; this.used[n] = u; return; } catch(e) {}
     }
   },
   async decode(n) {
@@ -338,16 +470,21 @@ const AudioMgr = {
     } catch(e) {   // e.g. browser claims ogg support but cannot decode → try the next format
       const tried = this.bytes[n].url, urls = this.urlsFor(n), i = urls.indexOf(tried);
       delete this.bytes[n]; this.decoding[n] = false;
-      for (const u of urls.slice(i + 1)) { try { const r = await fetch(u); if (!r.ok) continue; this.bytes[n] = { ab: await r.arrayBuffer(), url:u }; return this.decode(n); } catch(e2) {} }
+      for (const u of urls.slice(i + 1)) { try { const r = await fetch(u); if (!r.ok) continue; this.bytes[n] = { ab: await r.arrayBuffer(), url:u }; this.used[n] = u; this.precacheHint([n]); return this.decode(n); } catch(e2) {} }
     }
+  },
+  async decodeAllByPrio() {   // nach dem Entsperren: Steuerungs-Sounds zuerst, nacheinander → kurze Zeit bis zum ersten Ton
+    const ks = Object.keys(this.bytes), p = ks.filter(n => AUDIO_PRIO.includes(n)), rest = ks.filter(n => !AUDIO_PRIO.includes(n));
+    await Promise.all(p.map(n => this.decode(n)));
+    for (const n of rest.sort((a, b) => (this.specs[a].loop ? 1 : 0) - (this.specs[b].loop ? 1 : 0))) await this.decode(n);
   },
   onDecoded(n) {
     if (n === 'ambience_well_loop') this.setLoop('ambience_well_loop', true);
     if (MUSIC_TIERS.includes(n) && this.music.want === MUSIC_TIERS.indexOf(n)) this.setMusicTier(this.music.want, true);
   },
   precacheHint(names) {   // tell the service worker which format files this browser uses (works on first visit too)
-    try { if (navigator.serviceWorker && location.protocol === 'https:')
-      navigator.serviceWorker.ready.then(reg => reg.active && reg.active.postMessage({ type:'precache', urls: names.map(n => this.urlsFor(n)[0]) })).catch(() => {}); } catch(e) {}
+    try { if (navigator.serviceWorker && window.isSecureContext)
+      navigator.serviceWorker.ready.then(reg => reg.active && reg.active.postMessage({ type:'precache', urls: names.map(n => this.used[n] || this.urlsFor(n)[0]) })).catch(() => {}); } catch(e) {}
   },
   // iOS/Safari: AudioContext must be created/resumed inside a touch gesture; a silent buffer kicks it awake.
   unlock() {
@@ -358,7 +495,7 @@ const AudioMgr = {
         this.sfxBus = this.ctx.createGain(); this.sfxBus.connect(this.master);
         this.musicBus = this.ctx.createGain(); this.musicBus.connect(this.master);
       } catch(e) { this.ctx = null; return; }
-      for (const n of Object.keys(this.bytes)) this.decode(n);
+      this.decodeAllByPrio();
     }
     if (this.ctx.state !== 'running') { const p = this.ctx.resume(); if (p && p.catch) p.catch(() => {}); }
     if (!this.unlocked) {
@@ -476,20 +613,28 @@ const Haptics = { buzz(p) { try { if (navigator.vibrate) navigator.vibrate(p); }
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 const stage = document.getElementById('stage');
+const vfx = BNVFX.create({ maxParticles: 280 });   // VFX-Modul (Pool, Hit-Stop, Shake, Risse, Glows) – vfx/vfx.js
+const scarf = BNNinjaAnim.createScarf();           // VFX Phase 2: Verlet-Schal (vfx/ninja-anim.js)
+const speed = BNNinjaAnim.createSpeedlines();      // Speedlines nur ohne Fass
+const ea = BNEnemyAnim.create({ vfx, balance: BALANCE });   // Gegner-Animationen + Leichen-Pool (vfx/enemy-anim.js)
+let spLastY = 0;
 const WORLD_H = 800;
 const PX_PER_M = WORLD_H / BALANCE.world.metersPerScreen;      // 80
 const ROW_H = BALANCE.world.rowMeters * PX_PER_M;               // 120
 const REST_Y = 290, ANCHOR_Y = -30, CUT_Y = 112;
 let W = 400, scale = 1, dpr = 1, WALL_W = 34, COL_OFF = 100;
+const Quality = { low:false, dts:new Float32Array(120), n:0, lastSwitch:0 };   // adaptive Auflösung (perf.*)
 
 function resize() {
   const r = stage.getBoundingClientRect();
-  dpr = Math.min(window.devicePixelRatio || 1, 3);
+  const pf = BALANCE.perf;
+  dpr = Math.min(window.devicePixelRatio || 1, Quality.low ? pf.lowDpr : pf.maxDpr);
   canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
   scale = r.height / WORLD_H; W = r.width / scale;
   WALL_W = Math.max(28, Math.min(48, W * 0.09));
   COL_OFF = clamp(W/2 - WALL_W - 50, 70, 130);
   ctx.setTransform(scale*dpr, 0, 0, scale*dpr, 0, 0);
+  vfx.setPixelRatio(scale*dpr); buildLayers();          // Offscreen-Ebenen (Verläufe, Mondkegel, Nebel, Vignette) neu
 }
 
 /* ===================================================================== HELPERS */
@@ -499,13 +644,15 @@ function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function clamp(v,a,b){ return v<a?a:v>b?b:v; }
 function lerp(a,b,t){ return a+(b-a)*t; }
 function easeOutCubic(p){ return 1-Math.pow(1-p,3); }
-function easeOutBack(p){ const c1=1.25, c3=c1+1; return 1 + c3*Math.pow(p-1,3) + c1*Math.pow(p-1,2); }
+function easeOutBack(p, c1 = 1.25){ const c3=c1+1; return 1 + c3*Math.pow(p-1,3) + c1*Math.pow(p-1,2); }
 function smooth(p){ p=clamp(p,0,1); return p*p*(3-2*p); }
 // {start, perMeter, min/max} linear by depth
 function ramp(spec, m){ if (typeof spec === 'number') return spec; let v = spec.start + (spec.perMeter||0)*m; if (spec.min!=null) v = Math.max(spec.min, v); if (spec.max!=null) v = Math.min(spec.max, v); return v; }
 // {start, min} interpolated between fromM and toM
 function rampSM(spec, fromM, toM, m){ if (typeof spec === 'number') return spec; if (spec.perMeter!=null) return ramp(spec, m); return lerp(spec.start, spec.min, clamp((m-fromM)/Math.max(1,toM-fromM),0,1)); }
-function stepVal(arr, m){ let v = arr[0].value; for (const s of arr) if (m >= s.fromM) v = s.value; return v; }
+function stepVal(arr, m){ if (typeof arr === 'number') return arr; let v = arr[0].value; for (const s of arr) if (m >= s.fromM) v = s.value; return v; }
+function deepMerge(t, src){ for (const k in src) { if (k[0] === '_') continue; const v = src[k];
+  if (v && typeof v === 'object' && !Array.isArray(v) && t[k] && typeof t[k] === 'object' && !Array.isArray(t[k])) deepMerge(t[k], v); else t[k] = v; } return t; }
 function weighted(obj){ let tot=0; for (const k in obj) tot += Math.max(0,obj[k]); if (tot<=0) return null; let r=Math.random()*tot; for (const k in obj){ r -= Math.max(0,obj[k]); if (r<=0) return k; } return null; }
 const colX = c => W/2 + c*COL_OFF;
 const rowY = r => REST_Y + r*ROW_H;
@@ -517,9 +664,11 @@ function circleRect(cx,cy,r, rx,ry,rw,rh){ const nx=clamp(cx,rx,rx+rw), ny=clamp
 /* ===================================================================== STATE */
 const G = {
   state:'menu', time:0, depth:0, scoreF:0, kills:0, coinsRun:0, scrollPx:0,
-  combo:{ streak:0, lastAt:-1e9, mult:1 },
+  combo:{ streak:0, lastAt:-1e9, mult:1, tier:0 },
+  parts:{ depth:0, multBonus:0, kills:0, bonus:0, milestones:0 }, run:{}, wave:{ phase:'active', t:0, idx:0 },
+  recordDepth:0, recordHit:false, lastKillAt:-1e9, multiN:0, overShown:true,
   ents:[], coins:[], fx:[], particles:[], texts:[], projectiles:[], deco:[], dust:[],
-  shake:0, hitStop:0, flash:0, vignette:0, slowMo:1, bgOff:0, sideOff:0,
+  hitStop:0, slowMo:1, bgOff:0, sideOff:0,
   lastAttackStart:-1e9, cutterCooldownUntil:0, plantCooldownUntil:0,
   nextSpawnM:{}, nextCoinM:0, nextDecoM:0, chainId:0,
   pickup:{ burstDepth:null, lastDepth:-1e9, nextRollM:0 },
@@ -528,28 +677,38 @@ const G = {
 const N = {
   hx:0, vv:0, hT:0, vT:0, x:0, y:0, tw:{ x:null, y:null }, queue:[],
   barrel:true, inv:0, slashT:0, slashDir:0, slashCD:0, upSlashT:0, flipT:0, prevCell:'0,0', leftCell:null, leftAt:-1e9,
-  dead:false, fall:{ vx:0, vy:0, spin:0 }, rot:0, vx:0, lastX:0, shieldCharges:0
+  dead:false, fall:{ vx:0, vy:0, spin:0 }, rot:0, vx:0, lastX:0, shieldCharges:0, slashBuf:null, lastMoveAt:{ x:-1e9, y:-1e9 }, lastSwipeSnd:-1e9
 };
 const bodyR = () => N.barrel ? 26 : 16;
 const form = () => N.barrel ? 'barrel' : 'noBarrel';
 
 function resetRun(tutorial) {
   Object.assign(G, { time:0, depth:0, scoreF:0, kills:0, coinsRun:0, ents:[], coins:[], fx:[], particles:[], texts:[], projectiles:[],
-    shake:0, hitStop:0, flash:0, vignette:0, slowMo:1, lastAttackStart:-1e9, cutterCooldownUntil:0, plantCooldownUntil:0,
-    nextSpawnM:{ '-1': 2.5, '1': 0 }, nextCoinM: 3, chainId:0, milestonesHit:{}, deathReason:'', threats:new Set() });
-  G.combo = { streak:0, lastAt:-1e9, mult:1 };
+    hitStop:0, slowMo:1, lastAttackStart:-1e9, cutterCooldownUntil:0, plantCooldownUntil:0,
+    nextSpawnM:{ '-1': 2.5, '1': 0 }, nextCoinM: 3, chainId:0, chainGot:{}, milestonesHit:{}, nextMilestoneM:0, deathReason:'', threats:new Set(),
+    lastKillAt:-1e9, multiN:0, recordHit:false, overShown:true });
+  vfx.clear(); ea.clear(); speed.clear(); scarf.reset();
+  G.combo = { streak:0, lastAt:-1e9, mult:1, tier:0 };
+  G.parts = { depth:0, multBonus:0, kills:0, bonus:0, milestones:0 };
+  G.run = { nearMiss:0, counter:0, maxMult:1, barrelLost:false, kills:0 };
+  G.wave = { phase:'active', t:0, idx:0 };
+  G.recordDepth = tutorial ? 0 : Store.data.bestDepth;
   G.pickup = { burstDepth:null, lastDepth:-1e9, nextRollM:10 };
   Object.assign(N, { hx:0, vv:0, hT:0, vT:0, x:colX(0), y:rowY(0), tw:{x:null,y:null}, queue:[], barrel:true, inv:0, slashT:0, slashDir:0, slashCD:0,
-    upSlashT:0, flipT:0, prevCell:'0,0', leftCell:null, leftAt:-1e9, dead:false, rot:0, vx:0, lastX:colX(0), shieldCharges: Loadout.shield.charges });
+    upSlashT:0, flipT:0, prevCell:'0,0', leftCell:null, leftAt:-1e9, dead:false, rot:0, vx:0, lastX:colX(0), shieldCharges: Loadout.shield.charges,
+    slashBuf:null, lastMoveAt:{ x:-1e9, y:-1e9 }, lastSwipeSnd:-1e9 });
+  spLastY = N.y;
   G.tutorial = tutorial ? { t:0, step:0, waitId:null, waitStep:null } : null;
-  if (!tutorial) { // first crawler already visible at the start so the screen is not empty
-    spawnWall(1, 'krabbler', { y: WORLD_H - 140, targetRow: 0 });
-  }
+  const op = BALANCE.opening;
+  if (!tutorial && op.hotStart) {   // heißer Start: Gegner liegen schon bereit (erste Bedrohung ≈ 1,5 s)
+    for (const p of op.preplaced) spawnWall(p.side, 'krabbler', { y: p.y, targetRow: p.row, idleOverride: p.idleMs });
+    G.nextSpawnM = { '-1': 6, '1': 8 }; G.nextCoinM = op.firstCoinsM;
+  } else if (!tutorial) spawnWall(1, 'krabbler', { y: WORLD_H - 140, targetRow: 0 });
 }
 
 /* ===================================================================== NINJA MOVEMENT
    3x3 grid: hx ∈ {-1,0,1}, vv ∈ {-1,0,1}. Each axis returns to 0 after returnDelayMs. */
-function tweenTo(axis, to, dur, back) { N.tw[axis] = { from:N[axis], to, t:0, dur:Math.max(1,dur), back }; }
+function tweenTo(axis, to, dur, back) { N.tw[axis] = { from:N[axis], to, t:0, dur:Math.max(1,dur), back }; if (!back) N.lastMoveAt[axis] = G.time; }
 function inTransit(axis) { const t = N.tw[axis]; return t && t.t < t.dur; }
 function ninjaCell() { return [clamp(Math.round((N.x - W/2)/COL_OFF),-1,1), clamp(Math.round((N.y - REST_Y)/ROW_H),-1,1)]; }
 
@@ -561,23 +720,28 @@ function input(dx, dy) {
 function processQueue() {
   while (N.queue.length) {
     const it = N.queue[0];
-    const busy = (it.dx && inTransit('x')) || (it.dy && inTransit('y'));
+    // nur gleiche Richtung auf derselben Achse während der Bewegung puffern; Gegenrichtung/Rückweg bricht sofort ab
+    const busy = (it.dx && inTransit('x') && !N.tw.x.back && N.hx === it.dx) || (it.dy && inTransit('y') && !N.tw.y.back && N.vv === it.dy);
     if (busy && G.time - it.at < BALANCE.grid.inputBufferMs) break;   // buffered, not lost
     N.queue.shift(); applyInput(it.dx, it.dy);
   }
 }
 function applyInput(dx, dy) {
   const g = BALANCE.grid, mv = g.moveDurationMs[form()], hold = g.returnDelayMs[form()];
-  AudioMgr.play('swipe', { vol: dx ? 1 : 0.7 });
+  // Ecke = zwei Wischer: kommt der zweite Wischer kurz nach dem ersten, landen beide Achsen gemeinsam (eine Bewegung, ein Sound)
+  const merge = (ax) => { const t = N.tw[ax]; return t && !t.back && t.t < t.dur && G.time - N.lastMoveAt[ax] <= g.cornerMergeMs ? Math.max(40, t.dur - t.t) : 0; };
+  if (G.time - N.lastSwipeSnd > g.cornerMergeMs) { AudioMgr.play('swipe', { vol: dx ? 1 : 0.7 }); N.lastSwipeSnd = G.time; }
   if (dy) {
     if (dy !== N.vv) AudioMgr.play(dy < 0 ? 'rope_retract' : 'rope_extend');
-    N.vv = dy; N.vT = hold; tweenTo('y', rowY(dy), mv);
+    const mx = merge('x');
+    N.vv = dy; N.vT = hold; tweenTo('y', rowY(dy), mx ? Math.max(mx, mv * 0.6) : mv);
     if (N.hx && !dx) N.hT = Math.max(N.hT, hold * g.comboHoldSyncPct);
     if (!N.barrel && N.hx === 0) N.flipT = 1;
     if (dy < 0) tryKillCutter();
   }
   if (dx) {
-    N.slashFrom = N.hx; N.hx = dx; N.hT = hold; tweenTo('x', colX(dx), mv);
+    const my = merge('y');
+    N.slashFrom = N.hx; N.hx = dx; N.hT = hold; tweenTo('x', colX(dx), my ? Math.max(my, mv * 0.6) : mv);
     if (N.vv && !dy) N.vT = Math.max(N.vT, hold * g.comboHoldSyncPct);
     startSlash(dx);
   }
@@ -592,16 +756,18 @@ function updateNinja(dtMs) {
   processQueue();
   if (N.hx) { N.hT -= dtMs; if (N.hT <= 0 && !inTransit('x') && !returnBlocked(0, N.vv)) { N.hx = 0; tweenTo('x', colX(0), g.returnDurationMs, true); } }
   if (N.vv) { N.vT -= dtMs; if (N.vT <= 0 && !inTransit('y') && !returnBlocked(N.hx, 0)) { N.vv = 0; tweenTo('y', rowY(0), g.returnDurationMs, true); AudioMgr.ropeCreak(); } }
-  for (const a of ['x','y']) {
+  for (let i = 0; i < 2; i++) { const a = i ? 'y' : 'x';
     const t = N.tw[a]; if (!t) continue;
     t.t += dtMs; const p = Math.min(1, t.t/t.dur);
-    N[a] = t.from + (t.to - t.from) * (t.back ? easeOutBack(p) : easeOutCubic(p));
+    N[a] = t.from + (t.to - t.from) * (t.back ? easeOutBack(p, g.returnOvershoot) : g.moveOvershoot ? easeOutBack(p, g.moveOvershoot) : easeOutCubic(p));
     if (p >= 1) { N[a] = t.to; }
   }
   if (!inTransit('x') && N.hx === 0) N.x = colX(0);
   N.vx = (N.x - N.lastX) / Math.max(0.001, dtMs/1000); N.lastX = N.x;
   N.inv = Math.max(0, N.inv - dtMs);
   N.slashT = Math.max(0, N.slashT - dtMs); N.slashCD = Math.max(0, N.slashCD - dtMs); N.upSlashT = Math.max(0, N.upSlashT - dtMs);
+  if (N.slashBuf && N.slashCD <= 0) { const b = N.slashBuf; N.slashBuf = null;   // gepufferter Hieb (statt verschluckt)
+    if (G.time - b.at <= BALANCE.attack.slashBufferMs && N.hx === b.dir) { N.slashFrom = b.from; startSlash(b.dir); } }
   N.flipT = Math.max(0, N.flipT - dtMs/350);
   // track the cell the ninja just left (fairness: no back-wall spawn there for a moment)
   const ck = key(...ninjaCell());
@@ -610,10 +776,14 @@ function updateNinja(dtMs) {
 
 /* ===================================================================== ATTACK */
 function startSlash(dir) {
-  if (N.slashCD > 0) return;
   const a = BALANCE.attack;
+  if (N.slashCD > 0) {
+    if (!(a.cancelRecoveryOnReverse && dir !== N.slashDir)) { N.slashBuf = { dir, at:G.time, from:N.slashFrom }; return; }
+  }
+  N.slashBuf = null;
   N.slashT = a.activeMs; N.slashDir = dir; N.slashCD = a.activeMs + a.recoveryMs[form()];
-  G.fx.push({ type:'slash', dir, t:0, life:240 });
+  vfx.slash(N.x, N.y, dir, { track:N, offsetY: N.barrel ? -18 : -4, radius: N.barrel ? 54 : 40, color: Loadout.weapon.trail, ms: a.activeMs });
+  scarf.impulse(-dir * 320, -160);
   AudioMgr.play('sword_slash'); Haptics.buzz(8);
 }
 function entCell(e) {
@@ -652,70 +822,128 @@ function tryKillCutter() {
   for (const e of G.ents) {
     if (e.type !== 'seilschneider' || e.dead) continue;
     const vuln = e.state === 'cut' || (e.state === 'descend' && e.t / e.descendMs >= BALANCE.enemies.seilschneider.vulnerableFromDescendPct);
-    N.upSlashT = 200; G.fx.push({ type:'upslash', t:0, life:260 });
+    N.upSlashT = 200; vfx.slash(N.x, N.y, 0, { track:N, offsetY: N.barrel ? -60 : -30, radius: 32, color: Loadout.weapon.trail });
     if (vuln) killEnt(e);
   }
 }
+/* ---- Combo / Punkte (v0.3): Stufen-Multiplikator x1 … x5 auf alle Punkte */
+const TIER_COL = ['#F4F1EA', '#F4F1EA', '#4FF0FF', '#FFB347', '#FF5A6E', '#FF5A6E'];
+function comboWindow() { const w = BALANCE.score.combo.windowMs; return Array.isArray(w) ? w[Math.min(G.combo.tier, w.length - 1)] : w; }
+function setTier(t) {
+  const tiers = BALANCE.score.combo.tiers; t = clamp(t, 0, tiers.length - 1);
+  const up = t > G.combo.tier; G.combo.tier = t; G.combo.mult = Math.min(BALANCE.score.combo.maxMult, tiers[t].mult);
+  if (up) { G.run.maxMult = Math.max(G.run.maxMult, G.combo.mult); Missions.runMax('mult', G.combo.mult);
+    G.texts.push({ x:N.x, y:N.y - 95, txt:'x' + G.combo.mult + '!', t:0, life:900, col:TIER_COL[t], size:34 });
+    AudioMgr.play('ui_confirm', { vol:0.6, rate: 1 + t * 0.08 }); UI.comboPop(); }
+}
+function comboStep() {   // ein Kill
+  const tiers = BALANCE.score.combo.tiers;
+  G.combo.streak++; G.combo.lastAt = G.time;
+  let t = 0; for (let i = 0; i < tiers.length; i++) if (G.combo.streak >= tiers[i].streak) t = i;
+  if (t !== G.combo.tier) setTier(t);
+}
+function comboDecay() {
+  if (!G.combo.streak) return;
+  if (G.time - G.combo.lastAt <= comboWindow()) return;
+  const tiers = BALANCE.score.combo.tiers;
+  if (BALANCE.score.combo.onTimeout === 'dropTier' && G.combo.tier > 0) { const t = G.combo.tier - 1; G.combo.tier = t; G.combo.mult = tiers[t].mult;
+    G.combo.streak = tiers[t].streak; G.combo.lastAt = G.time; if (t === 0) G.combo.streak = 0; }
+  else { G.combo.streak = 0; G.combo.tier = 0; G.combo.mult = 1; }
+}
+function comboReset() { G.combo = { streak:0, lastAt:-1e9, mult:1, tier:0 }; }
+function popup(x, y, pts, extra, col) {   // Punkte-Popup, Größe nach Wert
+  const size = clamp(16 + Math.log2(Math.max(1, pts) / 10) * 4, 16, 32);
+  G.texts.push({ x, y, txt:'+' + pts + (extra ? ' ' + extra : ''), t:0, life:800, col: col || TIER_COL[G.combo.tier], size });
+}
+function addBonus(pts, x, y, label, col) {
+  const p = Math.round(pts * G.combo.mult); G.scoreF += p; G.parts.bonus += p;
+  G.texts.push({ x, y, txt:label + ' +' + p, t:0, life:900, col, size:20 });
+  return p;
+}
+function nearMiss(e) {   // Angriffsfeld kurz vor dem Einschlag verlassen
+  const nm = BALANCE.score.nearMiss; if (!nm || G.tutorial) return;
+  if (!e.cells || !N.leftCell || G.time - N.leftAt > nm.lateDodgeMs) return;
+  if (!e.cells.includes(N.leftCell) || e.cells.includes(key(...ninjaCell()))) return;
+  addBonus(nm.points, N.x, N.y - 70, 'KNAPP!', '#4FF0FF');
+  if (G.combo.streak) G.combo.lastAt = Math.min(G.time, G.combo.lastAt + comboWindow() * nm.comboRefillPct);
+  G.run.nearMiss++; Missions.add('nearMiss'); AudioMgr.play('score_pickup', { vol:0.6, rate:1.4 });
+}
 function killEnt(e) {
   e.dead = true;
-  const def = BALANCE.enemies[e.type] || { points:0 };
-  const cfg = BALANCE.score.combo;
-  if (G.time - G.combo.lastAt <= cfg.windowMs) G.combo.streak++; else G.combo.streak = 1;
-  G.combo.lastAt = G.time; G.combo.mult = Math.min(cfg.maxMult, 1 + cfg.stepMult*(G.combo.streak-1));
-  const pts = Math.round(def.points * G.combo.mult);
-  G.scoreF += pts; G.kills++;
+  const def = BALANCE.enemies[e.type] || { points:0 }, sc = BALANCE.score;
+  // Konter: Kill in den letzten ms des Ausholens
+  const counter = !G.tutorial && ((e.state === 'windup' && e.windupMs - e.t <= sc.counter.lastWindupMs) || (e.state === 'cut' && e.t < 400));
+  comboStep();
+  let pts = Math.round(def.points * G.combo.mult * (counter ? sc.counter.mult : 1));
+  G.scoreF += pts; G.parts.kills += pts; G.kills++; G.run.kills++;
   const p = entPos(e);
-  G.texts.push({ x:p.x, y:p.y-20, txt:'+' + pts + (G.combo.mult>1 ? '  x' + G.combo.mult.toFixed(2).replace(/\.?0+$/,'') : ''), t:0, life:900, col:'#4FF0FF' });
-  burst(p.x, p.y, randi(10,16), ENEMY_COLORS[e.type] || ['#fff'], 260);
-  G.fx.push({ type:'hitflash', x:p.x, y:p.y, t:0, life:60 });
-  G.hitStop = BALANCE.attack.hitStopMs; G.shake = Math.max(G.shake, 120); G.shakeAmp = 4;
-  AudioMgr.play('enemy_hit'); AudioMgr.play('enemy_death', { vol:0.8, delay:0.06 }); Haptics.buzz(25);
+  popup(p.x, p.y - 20, pts, G.combo.mult > 1 ? 'x' + G.combo.mult : '');
+  if (counter) { G.texts.push({ x:p.x, y:p.y - 52, txt:'KONTER!', t:0, life:900, col:'#FFB347', size:24 }); G.run.counter++; Missions.add('counter'); }
+  if (G.time - G.lastKillAt <= sc.multiKill.withinMs) { G.multiN++; addBonus(sc.multiKill.bonusPerExtra * G.multiN, p.x, p.y - 80, G.multiN > 1 ? 'TRIPPEL!' : 'DOPPEL!', '#FF5A6E'); }
+  else G.multiN = 0;
+  G.lastKillAt = G.time;
+  Missions.add('kills'); Missions.add('kill_' + e.type);
+  // Treffer: Partikel aus dem Pool, 1-Frame-Flash, Hit-Stop (Spec attack.hitStopMs) + 4 px Shake – alles im VFX-Modul
+  vfx.hit(p.x, p.y, { type:e.type, colors: ENEMY_COLORS[e.type], dir: e.type === 'seilschneider' ? 0 : N.slashDir, hitStop: BALANCE.attack.hitStopMs + (counter ? 10 : 0), shake: counter ? 5 : 4 });
+  ea.kill(e, p.x, p.y + (e.yOff || 0));
+  fxClose(e, 250);
+  const rate = sc.combo.pitchPerStreak ? Math.pow(2, Math.min(G.combo.streak, 12) / 24) : 1;
+  AudioMgr.play('enemy_hit'); AudioMgr.play('enemy_death', { vol:0.8, delay:0.06, rate }); Haptics.buzz(25);
   if (e.type === 'seilschneider') G.cutterCooldownUntil = G.time + BALANCE.enemies.seilschneider.cooldownMs;
   if (G.tutorial && G.tutorial.waitId === e.id) G.tutorial.waitId = null;
 }
 function collectBarrel(e) {
-  e.dead = true; N.barrel = true; G.pickup.lastDepth = G.depth;
+  e.dead = true; N.barrel = true; G.pickup.lastDepth = G.depth; Missions.add('barrelBack'); G.run.barrelSince = G.depth;
   const p = entPos(e);
   burst(p.x, p.y, 14, ['#FFB347','#FFE2A8','#8A5A2E'], 220); burst(N.x, N.y, 12, ['#FFE2A8','#FFB347'], 160);
   G.texts.push({ x:N.x, y:N.y-60, txt:'Fass zurück!', t:0, life:1100, col:'#FFB347' });
   AudioMgr.play('barrel_pickup'); Haptics.buzz([20,30,20]);
 }
-const ENEMY_COLORS = { krabbler:['#3B3F4A','#8C8F99','#FF5A2A'], fledermaus:['#241B3A','#B9C3D6','#FFC23A'], seilschneider:['#4E7A3A','#C7CED6','#8fd16a'],
-  beisspflanze:['#2F5B4A','#7fbf5a','#c23a4a'], spuckpflanze:['#2F5B4A','#9be36a','#d7ff6a'], fass:['#8A5A2E'] };
+const ENEMY_COLORS = { krabbler:['#3B3F4A','#8C8F99','#FF5A2A'], fledermaus:['#241B3A','#B9C3D6','#FFC23A'], seilschneider:['#4E7A3A','#C7CED6','#2F5B4A'],
+  beisspflanze:['#2F5B4A','#4E7A3A','#E2283C'], spuckpflanze:['#2F5B4A','#4E7A3A','#E2283C'], fass:['#8A5A2E'] };
+// Wandriss-Handles (vfx.wallBreak) sicher ansprechen – Pool-Slots werden wiederverwendet, daher Generation prüfen
+function fxBreak(e) { if (e.fx && e.fx.on && e.fx.gen === e.fxGen && e.fx.state === 0) vfx.wallBreakNow(e.fx); }
+function fxClose(e, ms) { if (e.fx && e.fx.on && e.fx.gen === e.fxGen) vfx.wallClose(e.fx, ms); e.fx = null; }
 function entPos(e) { return { x: e.x ?? colX(e.c), y: e.y ?? rowY(e.r) }; }
+const _pos = { x:0, y:0 };
 
 /* ===================================================================== DAMAGE / GAME OVER */
 function hurt(src) {
   if (N.inv > 0 || G.state !== 'play' || N.dead) return;
   if (G.tutorial && G.tutorial.t < BALANCE.tutorial.noDamageUntilMs) {
-    N.inv = 700; G.texts.push({ x:N.x, y:N.y-50, txt:'Autsch! (Übung)', t:0, life:900, col:'#ff7584' }); Haptics.buzz(30); return;
+    N.inv = 700; G.texts.push({ x:N.x, y:N.y-50, txt:'Autsch! (Übung)', t:0, life:900, col:'#E2283C' }); Haptics.buzz(30); return;
   }
-  if (BALANCE.score.combo.resetOnHit) G.combo = { streak:0, lastAt:-1e9, mult:1 };
+  if (BALANCE.score.combo.resetOnHit) comboReset();
   if (N.shieldCharges > 0) { N.shieldCharges--; N.inv = 800; return; }   // stub for future shields
   if (N.barrel) {
-    N.barrel = false; N.inv = BALANCE.barrel.invulnAfterBurstMs; G.pickup.burstDepth = G.depth;
-    // barrel burst: wood splinters with rotation/gravity, 2 iron ring halves, dust
-    for (let i=0;i<11;i++) { const a = rand(-Math.PI, 0), s = rand(160, 420);
-      G.particles.push({ kind:'splinter', x:N.x+rand(-16,16), y:N.y+rand(-8,20), vx:Math.cos(a)*s, vy:Math.sin(a)*s-60, rot:rand(0,6), vr:rand(-14,14), w:rand(5,8), h:rand(16,26), life:1100, max:1100, c:pick(['#8A5A2E','#5A3518','#a8743f']), g:900 }); }
-    for (let i=0;i<2;i++) G.particles.push({ kind:'ring', x:N.x, y:N.y+8, vx:(i?1:-1)*rand(140,220), vy:-rand(120,220), rot:0, vr:(i?1:-1)*9, r:24, life:1200, max:1200, c:'#4A4F57', g:900, half:i });
-    for (let i=0;i<16;i++) { const a=rand(0,Math.PI*2), s=rand(30,120); G.particles.push({ x:N.x, y:N.y+10, vx:Math.cos(a)*s, vy:Math.sin(a)*s, r:rand(6,14), life:700, max:700, c:'rgba(160,150,140,0.35)', g:-20, soft:true }); }
-    G.vignette = 1; G.hitStop = 60; G.shake = 200; G.shakeAmp = 6; G.flash = 0.4;
-    G.texts.push({ x:N.x, y:N.y-60, txt:'Fass zerbrochen!', t:0, life:1100, col:'#ff7584' });
+    N.barrel = false; N.inv = BALANCE.barrel.invulnAfterBurstMs; G.pickup.burstDepth = G.depth; G.pickup.nextRollM = G.depth + 10; G.run.barrelLost = true;
+    // Fassbruch: Splitter, 2 Eisenring-Hälften, Staub, Hit-Stop 60 ms, Shake 6 px, Flash 0.4, Vignetten-Puls (VFX-Modul)
+    vfx.barrelBreak(N.x, N.y, { shake: 6 });
+    G.texts.push({ x:N.x, y:N.y-60, txt:'Fass zerbrochen!', t:0, life:1100, col:'#E2283C' });
     AudioMgr.play('player_hit'); AudioMgr.play('barrel_break', { delay:0.03 }); Haptics.buzz([40,30,80]);
   } else gameOver(src === 'rope' ? 'rope' : 'hit');
 }
 function gameOver(reason) {
   if (G.state !== 'play') return;
-  N.dead = true; G.deathReason = reason; G.state = 'dying'; G.overAt = performance.now();
+  N.dead = true; G.deathReason = reason; G.state = 'dying'; G.overAt = performance.now(); G.overShown = false; G.overShownAt = null; G.slowMo = 1;
   N.fall = { vx: reason === 'rope' ? 0 : rand(-80,80), vy: reason === 'rope' ? 40 : -260, spin: reason === 'rope' ? 1.5 : rand(-8,8) };
-  G.shake = 300; G.shakeAmp = 6; G.flash = 0.7; G.vignette = 1;
-  if (reason === 'rope') AudioMgr.play('rope_snap'); else AudioMgr.play('player_hit'), burst(N.x, N.y, 18, ['#1F2A5C','#E2283C','#E8C9A6'], 300);
+  vfx.shake(6); vfx.screenFlash(0.7); vfx.vignette(1);
+  if (reason === 'rope') { AudioMgr.play('rope_snap'); vfx.ropeSnap(ropeXAt(CUT_Y + 8), CUT_Y + 8, { shake: 6 }); }
+  else { AudioMgr.play('player_hit'); burst(N.x, N.y, 18, ['#1F2A5C','#E2283C','#E8C9A6'], 300); }
   AudioMgr.setLoop('rope_cutting_loop', false); AudioMgr.play('game_over', { delay: reason === 'rope' ? 0.35 : 0.2 }); AudioMgr.musicOutOnOver(); Haptics.buzz(220);
-  const score = Math.floor(G.scoreF), isNew = score > Store.data.best;
+  const score = Math.floor(G.scoreF), isNew = score > Store.data.best, prevBestDepth = Store.data.bestDepth;
   if (isNew) Store.data.best = score;
   Store.data.bestDepth = Math.max(Store.data.bestDepth, Math.floor(G.depth));
+  Missions.runMax('score', score);
+  Store.data.stats.runs = (Store.data.stats.runs || 0) + 1; if (!G.tutorial) Missions.add('runs');
   Store.save();
-  setTimeout(() => { UI.showOver(score, Store.data.best, isNew, Math.floor(G.depth), G.coinsRun, reason); setState('over'); if (isNew && score > 0) AudioMgr.play('new_highscore'); }, 1100);
+  // Karte nach cardDelayMs (im Frame-Loop, kein setTimeout) – kurzer Todes-Moment, dann sofort weiter
+  G.over = { score, isNew, depth: Math.floor(G.depth), coins: G.coinsRun, reason, prevBestDepth };
+}
+function showOverNow() {
+  const o = G.over; if (!o || G.overShown) return; G.overShown = true; G.overShownAt = performance.now(); $('over').classList.add('lock');
+  UI.showOver(o.score, Store.data.best, o.isNew, o.depth, o.coins, o.reason, o.prevBestDepth); setState('over');
+  if (o.isNew && o.score > 0) AudioMgr.play('new_highscore');
 }
 
 /* ===================================================================== SPAWNING */
@@ -737,14 +965,21 @@ function spawnSpike(side, o = {}) {
   G.ents.push(e); return e;
 }
 function spawnCutter(o = {}) {
+  // (v0.3) Seilschneider läuft durch die Entscheidungs-Queue (zählt als aktiver Angriff, Lücken/Limits gelten); Tutorial/Debug: o.now
   const d = BALANCE.enemies.seilschneider, m = G.depth;
-  const e = { id:G.idSeq++, type:'seilschneider', state:'descend', t:0, prog:0, side: pick([-1,1]), y:-50, x:W/2,
+  const e = { id:G.idSeq++, type:'seilschneider', state:'pending', t:0, prog:0, side: pick([-1,1]), y:-50, x:W/2, pendingFor:0,
     descendMs: o.descendMs ?? rampSM(d.descendMs, d.fromM, d.rampToM, m), cutMs: o.cutMs ?? rampSM(d.cutMs, d.fromM, d.rampToM, m), tick:0 };
   G.ents.push(e);
-  AudioMgr.play('warning');   // audible windup of the rope cutter only (no visual marker)
+  if (o.now !== false && (G.tutorial || o.now)) releaseCutter(e);
   return e;
 }
+function releaseCutter(e) {
+  e.state = 'descend'; e.t = 0; e.reqAt = null;
+  AudioMgr.play('warning');   // audible windup of the rope cutter only (no visual marker)
+}
 function cutterActive() { return G.ents.some(e => e.type === 'seilschneider' && !e.dead); }
+function cutterActiveVisible() { return G.ents.some(e => e.type === 'seilschneider' && !e.dead && (e.state === 'descend' || e.state === 'cut')); }
+function cutterVulnerable() { return G.ents.some(e => e.type === 'seilschneider' && !e.dead && (e.state === 'descend' || e.state === 'cut')); }
 function canSpawn(type) {
   const d = BALANCE.enemies[type], m = G.depth;
   if (!d || m < (d.fromM || 0)) return false;
@@ -776,6 +1011,9 @@ function columnSafeForCoins(c) {
 function spawner() {
   if (G.tutorial) return;
   const m = G.depth, dens = stepVal(BALANCE.wallDensity, m);
+  if (G.wave.phase === 'rest' && !G.wave.coinsGiven) {   // Atempause: Münzkette vorziehen
+    G.wave.coinsGiven = true; G.nextCoinM = Math.min(G.nextCoinM, m);
+  }
   for (const side of [-1, 1]) {
     if (m >= G.nextSpawnM[side]) { spawnFromWeights(side); G.nextSpawnM[side] = m + (BALANCE.world.metersPerScreen / dens) * rand(0.75, 1.25); }
   }
@@ -785,13 +1023,16 @@ function spawner() {
     if (cols.length) spawnCoinChain(pick(cols));
     G.nextCoinM = m + cc.avgEveryM * cc.chainLength * rand(0.7, 1.3);
   }
-  // barrel pickup roll every 10 m
+  // Comeback-Fass: Wurf alle 10 m, nach pityAfterM garantiert; kommt in der Reihe des Ninjas, scrollt nie vorbei
   const bp = BALANCE.barrel.pickup;
   if (m >= G.pickup.nextRollM) {
     G.pickup.nextRollM = m + 10;
-    if ((!bp.onlyWhenNoBarrel || !N.barrel) && G.pickup.burstDepth != null && m - G.pickup.burstDepth >= bp.minDepthAfterBurstM
-        && m - G.pickup.lastDepth >= bp.minSpacingM && !G.ents.some(e => e.type === 'fass') && Math.random() < bp.chancePer10m) {
-      spawnWall(pick([-1,1]), 'fass'); G.pickup.lastDepth = m;
+    const since = G.pickup.burstDepth == null ? 0 : m - G.pickup.burstDepth;
+    if ((!bp.onlyWhenNoBarrel || !N.barrel) && G.pickup.burstDepth != null && since >= bp.minDepthAfterBurstM
+        && m - G.pickup.lastDepth >= bp.minSpacingM && !G.ents.some(e => e.type === 'fass') && (Math.random() < bp.chancePer10m || since >= bp.pityAfterM)) {
+      const row = bp.targetNinjaRow ? N.vv : rowPick() ?? 0;
+      let side = pick([-1,1]); if (slotTaken(side, row)) side = -side;
+      spawnWall(side, 'fass', { targetRow: row, noPass:true }); G.pickup.lastDepth = m;
     }
   }
 }
@@ -801,6 +1042,8 @@ const ATTACK_STATES = new Set(['windup','attack','crack','bite','aim','spit']);
 function entThreatCells(e) {
   if (e.dead) return [];
   if (e.cells && ATTACK_STATES.has(e.state)) return e.cells;
+  // Krabbler-Arm noch in der Mitte → Mitte bleibt bedroht (Ninja pendelt nicht durch den Arm zurück)
+  if (e.type === 'krabbler' && e.state === 'recover' && e.cells && e.t < BALANCE.enemies.krabbler.attacks.jab.recoverMs * 0.3) return e.cells.filter(k => k.startsWith('0,'));
   if (e.type === 'stacheln') {
     const la = G.scrollPx * BALANCE.fairness.spikeLookAheadMs / 1000, out = [], br = 30;
     for (let r=-1;r<=1;r++) { const y = rowY(r);
@@ -815,19 +1058,26 @@ function computeThreats(exclude) {
   for (const p of G.projectiles) s.add(p.targetKey);
   return s;
 }
-function activeAttacks() { return G.ents.filter(e => !e.dead && ATTACK_STATES.has(e.state)).length; }
-function reachableInOneSwipe() {
-  // a swipe sets an axis to ±1 directly; staying put is also allowed
+function activeAttacks() {
+  let n = 0;
+  for (const e of G.ents) if (!e.dead && (ATTACK_STATES.has(e.state) || (e.type === 'seilschneider' && BALANCE.enemies.seilschneider.countsAsActiveAttack && (e.state === 'descend' || e.state === 'cut')))) n++;
+  return n;
+}
+function reachableInOneSwipe(withCorners) {
+  // ein Wischer setzt eine Achse direkt auf ±1; Stehenbleiben zählt auch. Ecken brauchen ZWEI Wischer (keine Diagonalen)
   const out = [key(N.hx, N.vv)];
   for (const h of [-1,1]) out.push(key(h, N.vv));
   for (const v of [-1,1]) out.push(key(N.hx, v));
-  for (const h of [-1,1]) for (const v of [-1,1]) out.push(key(h, v));
+  if (withCorners) for (const h of [-1,1]) for (const v of [-1,1]) out.push(key(h, v));
   return out;
 }
-function fairOK(e, cells, sweepRow) {
+function fairOK(e, cells, sweepRow, windupMs) {
   const f = BALANCE.fairness;
   const cur = computeThreats(e), union = new Set([...cur, ...cells]);
-  if (f.alwaysOneSafeCellReachableInOneSwipe && !reachableInOneSwipe().some(k => !union.has(k))) return false;
+  if (f.alwaysOneSafeCellReachableInOneSwipe && !reachableInOneSwipe(false).some(k => !union.has(k))
+      && !((windupMs || 0) >= f.minWindupCornerOnlyMs && reachableInOneSwipe(true).some(k => !union.has(k)))) return false;
+  // Seilschneider angreifbar → obere Reihe bleibt frei (nach oben wischen muss immer gehen)
+  if (f.keepTopRowFreeWhileCutterVulnerable && cutterVulnerable() && cells.some(k => k.endsWith(',-1'))) return false;
   if (CELLS.filter(([c,r]) => !union.has(key(c,r))).length < 2) return false;
   if (f.neverAllThreeCellsOfARowBlocked) for (let r=-1;r<=1;r++) {
     const full = [-1,0,1].every(c => union.has(key(c,r)));
@@ -837,15 +1087,32 @@ function fairOK(e, cells, sweepRow) {
   }
   return true;
 }
+function escSteps(m) { const es = BALANCE.escalation; return es && m >= es.fromM ? Math.floor((m - es.fromM) / es.everyM) + 1 : 0; }
+function maxConcurrentNow(m) { const es = BALANCE.escalation, base = stepVal(BALANCE.behaviour.maxConcurrentAttacks, m), k = escSteps(m);
+  return k ? Math.max(base, Math.min(es.concurrentCap, base + k * es.concurrentPlus)) : base; }
+function attackGapNow(m) {
+  const es = BALANCE.escalation, wv = BALANCE.waves, k = escSteps(m);
+  let gap = ramp(BALANCE.behaviour.attackGapMs, m);
+  if (k) gap = Math.max(es.attackGapMinMs, gap - k * es.attackGapMinusMs);
+  if (wv && G.wave.phase === 'active') { const p = clamp(G.wave.t / Math.max(1, G.wave.dur || 1), 0, 1); gap *= lerp(wv.gapMultStart, wv.gapMultEnd, p) * (G.wave.surge ? wv.surgeGapMult : 1); }
+  return gap;
+}
 function tryRelease(e) {
   const b = BALANCE.behaviour, m = G.depth, f = BALANCE.fairness;
   const tut = e.tut;
   if (!tut) {
-    if (activeAttacks() >= stepVal(b.maxConcurrentAttacks, m)) return false;
-    if (G.time - G.lastAttackStart < Math.max(ramp(b.attackGapMs, m), f.minGapBetweenConflictingImpactsMs)) return false;
+    if (G.wave.phase === 'rest') return false;                         // Atempause: keine neuen Angriffe
+    if (activeAttacks() >= maxConcurrentNow(m)) return false;
+    if (G.time - G.lastAttackStart < Math.max(attackGapNow(m), f.minGapBetweenConflictingImpactsMs)) return false;
   }
   const baseWind = Math.max(f.minWindupMs, ramp(b.windupMs, m));
   const def = BALANCE.enemies[e.type];
+  if (e.type === 'seilschneider') {
+    // fair: nach oben muss frei sein (kein Angriff in der oberen Reihe der aktuellen Spalte)
+    const cur = computeThreats(e);
+    if ([-1,0,1].every(c => cur.has(key(c, -1)))) return false;
+    releaseCutter(e); G.lastAttackStart = G.time; return true;
+  }
   if (e.type === 'krabbler' || e.type === 'fledermaus') {
     const opts = {}; for (const [k, a] of Object.entries(def.attacks)) if (m >= (a.fromM || 0) && !(tut && k !== Object.keys(def.attacks)[0])) opts[k] = a.weight;
     const atk = weighted(opts); const a = def.attacks[atk];
@@ -853,8 +1120,11 @@ function tryRelease(e) {
     if (atk === 'jab') cells = [key(e.side, e.row), key(0, e.row)];
     else if (atk === 'leap' || atk === 'cross') { cells = [-1,0,1].map(c => key(c, e.row)); sweep = [e.row]; }
     else if (atk === 'swoop') { rowTo = e.row === 0 ? pick([-1,1]) : 0; cells = [key(e.side, e.row), key(0, e.row), key(0, rowTo), key(-e.side, rowTo)]; sweep = [e.row, rowTo]; }
-    if (!tut && !fairOK(e, cells, sweep)) return false;
-    Object.assign(e, { state:'windup', t:0, attack:atk, cells, rowTo, windupMs: e.windupOverride ?? (baseWind + (a.windupBonusMs || 0)) });
+    const wu = e.windupOverride ?? (baseWind + (a.windupBonusMs || 0));
+    if (!tut && !fairOK(e, cells, sweep, wu)) return false;
+    Object.assign(e, { state:'windup', t:0, attack:atk, cells, rowTo, windupMs: wu });
+    // Telegraph = sichtbarer Wandriss hinter dem Krabbler, Dauer = windupMs (rein visuell)
+    if (e.type === 'krabbler') { e.fx = vfx.wallBreak(e.x, e.y, { crackMs: e.windupMs, radius: 26, holdMs: 700, closeMs: 300 }); e.fxGen = e.fx.gen; }
   } else if (e.type === 'beisspflanze' || e.type === 'spuckpflanze') {
     const leftRecently = G.time - N.leftAt < f.noBackWallInCellNinjaJustLeftWithinMs ? N.leftCell : null;
     const cands = CELLS.filter(([c,r]) => {
@@ -870,9 +1140,12 @@ function tryRelease(e) {
         const nb = [[c-1,r],[c+1,r],[c,r-1],[c,r+1]].filter(([a,bb]) => Math.abs(a)<=1 && Math.abs(bb)<=1 && !(f.noBackWallInTopRowWhileCutterActive && bb === -1 && cutterActive()));
         if (!nb.length) continue; [tc, trr] = pick(nb); cells = [key(tc, trr)];
       } else cells = [key(c, r)];
-      if (!fairOK(e, cells, null)) continue;
       const crack = e.type === 'beisspflanze' ? rampSM(def.crackMs, def.fromM, def.rampToM, m) : def.crackMs;
+      if (!fairOK(e, cells, null, Math.max(f.minWindupMs, crack))) continue;
       Object.assign(e, { state:'crack', t:0, c, r, tc, tr:trr, cells, crackMs: Math.max(f.minWindupMs, crack), aimDir:0 });
+      // Wandriss (Dauer = crackMs), bricht zum Biss/Zielen auf; holdMs nur Sicherheitsnetz, Schließen beim Zurückziehen
+      e.fx = vfx.wallBreak(colX(c), rowY(r), { crackMs: e.crackMs, radius: 30,
+        holdMs: (e.type === 'beisspflanze' ? def.biteMs : def.aimMs) + def.stayMs + def.retractMs + 200, closeMs: def.retractMs }); e.fxGen = e.fx.gen;
       G.plantCooldownUntil = G.time + def.cooldownMs;
       G.lastAttackStart = G.time; return true;
     }
@@ -882,6 +1155,7 @@ function tryRelease(e) {
   return true;
 }
 function decisionQueue(dtMs) {
+  if (G.wave.phase === 'rest' && !G.tutorial) return;   // Atempause: Gegner warten ruhig
   const reqs = G.ents.filter(e => !e.dead && ((e.state === 'idle' && e.idleT <= 0 && e.type !== 'fass') || e.state === 'pending'));
   for (const e of reqs) if (e.reqAt == null) e.reqAt = G.time;
   reqs.sort((a,b) => a.reqAt - b.reqAt);
@@ -890,7 +1164,7 @@ function decisionQueue(dtMs) {
     if (e.state === 'idle') {
       e.idleT = BALANCE.behaviour.blockedIdleExtendMs; e.retries++;
       if (e.retries > BALANCE.behaviour.maxBlockedRetries) { e.state = 'leave'; e.reqAt = null; }
-    } else { e.pendingFor += dtMs; if (e.pendingFor > 6000) e.dead = true; }
+    } else if (G.wave.phase !== 'rest') { e.pendingFor += dtMs; if (e.pendingFor > (e.type === 'seilschneider' ? 12000 : 6000)) e.dead = true; }
   }
 }
 
@@ -915,14 +1189,18 @@ function updateEnts(dtMs) {
       }
       case 'krabbler': case 'fledermaus': case 'fass': updateWallEnt(e, dtMs, sc); break;
       case 'seilschneider': {
+        if (e.state === 'pending') break;
         if (e.state === 'descend') {
-          const p = Math.min(1, e.t / e.descendMs); e.y = lerp(-50, CUT_Y, smooth(p));
+          // schneller Einstieg bis knapp unter die Tiefenanzeige, dann langsames Abseilen – Körper sofort sichtbar
+          const p = Math.min(1, e.t / e.descendMs), DROP = 0.1, Y1 = CUT_Y - 30;
+          e.y = p < DROP ? lerp(-50, Y1, easeOutCubic(p / DROP)) : lerp(Y1, CUT_Y, smooth((p - DROP) / (1 - DROP)));
           if (p >= 1) { e.state = 'cut'; e.t = 0; }
         } else if (e.state === 'cut') {
           e.prog = Math.min(1, e.prog + dtMs / e.cutMs); e.tick += dtMs;
+          vfx.ropeFray(ropeXAt(CUT_Y + 8), CUT_Y + 8, e.prog, dtMs);   // Telegraph: Fasern lösen sich am Seil
           if (e.tick > 180) { e.tick = 0; if (!AudioMgr.has('rope_cutting_loop')) AudioMgr.play('cutTick'); }
           if (e.prog >= 1) {
-            if (G.tutorial && G.tutorial.t < BALANCE.tutorial.noDamageUntilMs) { e.prog = 0.2; G.texts.push({ x:W/2, y:CUT_Y+40, txt:'Nach oben wischen!', t:0, life:1100, col:'#ff7584' }); }
+            if (G.tutorial && G.tutorial.t < BALANCE.tutorial.noDamageUntilMs) { e.prog = 0.2; G.texts.push({ x:W/2, y:CUT_Y+40, txt:'Nach oben wischen!', t:0, life:1100, col:'#E2283C' }); }
             else { e.dead = true; G.cutterCooldownUntil = G.time + BALANCE.enemies.seilschneider.cooldownMs; gameOver('rope'); }
           }
         }
@@ -935,11 +1213,12 @@ function updateEnts(dtMs) {
   for (const p of G.projectiles) {
     p.t += dtMs; const k = Math.min(1, p.t / p.life);
     p.x = lerp(p.x0, p.x1, k); p.y = lerp(p.y0, p.y1, k) - Math.sin(k*Math.PI)*24;
-    if (Math.hypot(N.x - p.x, N.y - p.y) < bodyR() + 10) { p.done = true; hurt('spit'); burst(p.x, p.y, 8, ['#9be36a','#d7ff6a'], 140); }
-    if (k >= 1 && !p.done) { p.done = true; burst(p.x, p.y, 8, ['#9be36a','#d7ff6a'], 120); }
+    if (Math.hypot(N.x - p.x, N.y - p.y) < bodyR() + 10) { p.done = true; hurt('spit'); burst(p.x, p.y, 8, ['#4E7A3A','#2F5B4A'], 140); }
+    if (k >= 1 && !p.done) { p.done = true; burst(p.x, p.y, 8, ['#4E7A3A','#2F5B4A'], 120); }
   }
-  G.projectiles = G.projectiles.filter(p => !p.done);
-  G.ents = G.ents.filter(e => !e.dead);
+  // in-place kompaktieren statt filter() (keine Array-Allocs pro Frame; Semantik identisch)
+  let np = 0; for (const p of G.projectiles) if (!p.done) G.projectiles[np++] = p; G.projectiles.length = np;
+  let ne = 0; for (const e of G.ents) if (!e.dead) G.ents[ne++] = e; G.ents.length = ne;
 }
 function spikeTip(e) { const reachCol = e.len === 2 ? 0 : e.side; return colX(reachCol) - e.side * 22; }
 function updateWallEnt(e, dtMs, sc) {
@@ -948,7 +1227,7 @@ function updateWallEnt(e, dtMs, sc) {
     case 'scroll': {
       const prev = e.y; e.y -= sc;
       for (const r of [1,0,-1]) { const ry = rowY(r);
-        if (prev > ry && e.y <= ry && r === e.targetRow && !slotTaken(e.side, r, e)) {
+        if (prev > ry && e.y <= ry && r === e.targetRow && (!slotTaken(e.side, r, e) || e.noPass)) {
           e.y = ry; e.row = r; e.state = 'idle'; e.t = 0;
           e.idleT = e.idleOverride ?? (e.type === 'fass' ? BALANCE.barrel.pickup.stayMs : rand(...def.idleMs));
         } }
@@ -961,7 +1240,7 @@ function updateWallEnt(e, dtMs, sc) {
       break;
     case 'windup':
       if (e.tut && e.type === 'krabbler') G.slowMoReq = Math.min(G.slowMoReq, BALANCE.tutorial.steps.find(s => s.spawn === 'tutKrabbler').slowMo);
-      if (e.t >= e.windupMs) { e.state = 'attack'; e.t = 0; e.onWall = false; e.colRow = e.row;
+      if (e.t >= e.windupMs) { nearMiss(e); e.state = 'attack'; e.t = 0; e.onWall = false; e.colRow = e.row; fxBreak(e);
         if (e.attack === 'cross' || e.attack === 'swoop') { e.x = wallX(e.side); }
       }
       break;
@@ -992,7 +1271,7 @@ function updateWallEnt(e, dtMs, sc) {
     }
     case 'recover': {
       const a = def.attacks.jab, p = e.t / a.recoverMs;
-      e.x = lerp(colX(0), wallX(e.side), smooth((p - 0.3) / 0.7));
+      e.x = lerp(colX(0), wallX(e.side), easeOutCubic(Math.min(1, p / 0.6)));   // Arm zieht sofort zurück
       if (p >= 1) { e.x = wallX(e.side); e.onWall = true;
         if (e.tut && !e.dead) { e.state = 'idle'; e.idleT = 1500; e.retries = 0; } else e.state = 'leave'; }
       break;
@@ -1006,8 +1285,7 @@ function updatePlant(e, dtMs) {
   switch (e.state) {
     case 'pending': break;
     case 'crack':
-      if (Math.random() < dtMs/90) G.particles.push({ x:colX(e.c)+rand(-20,20), y:rowY(e.r)+rand(-20,20), vx:rand(-20,20), vy:rand(-10,40), r:rand(1.5,3.5), life:600, max:600, c:'#3A5670', g:500 });
-      if (e.t >= e.crackMs) { e.t = 0; e.state = e.type === 'beisspflanze' ? 'bite' : 'aim'; }
+      if (e.t >= e.crackMs) { e.t = 0; e.state = e.type === 'beisspflanze' ? 'bite' : 'aim'; fxBreak(e); if (e.type === 'beisspflanze') nearMiss(e); }
       break;
     case 'bite':
       { const [nc, nr] = ninjaCell(); if (nc === e.c && nr === e.r) hurt('bite'); }
@@ -1020,7 +1298,7 @@ function updatePlant(e, dtMs) {
         AudioMgr.play('swipe'); e.cells = null; }
       break;
     case 'stay':
-      if (e.t >= def.stayMs) { e.t = 0; e.state = 'retract'; }
+      if (e.t >= def.stayMs) { e.t = 0; e.state = 'retract'; fxClose(e, def.retractMs); }
       break;
     case 'retract':
       if (e.t >= def.retractMs) e.dead = true;
@@ -1045,13 +1323,47 @@ function ropeXAt(y) {
 /* ===================================================================== RENDER: BACKGROUND
    Moonlit ancient stone well: petrol top → black fog, parallax walls, warm lanterns. */
 const PAL = { abyss:'#05070F', fog:'#0B1426', top:'#12304A', stone:'#1C2A3A', joint:'#0E1724', edge:'#3A5670', moss:'#2F5B4A',
-  moon:'#9FD8FF', lantern:'#FFB347', lanternCore:'#FFE2A8', rope:'#C9A66B', ropeShade:'#8C6E3F' };
+  moon:'#9FD8FF', lantern:'#FFB347', lanternCore:'#FFE2A8', rope:'#C9A66B', ropeShade:'#8C6E3F',
+  iron:'#4A4F57', ironGlint:'#9AA3AD', wood:'#8A5A2E', woodDark:'#5A3518', suitShade:'#121833', text:'#F4F1EA' };
+const SIDES = [-1, 1];
+
+/* Offscreen-Ebenen: einmal pro resize() gebaut, pro Frame nur drawImage (keine Gradienten pro Frame) */
+const LAYERS = { bg:null, cyl:null, moon:null, fog:null, edge:null, sideL:null, sideR:null };
+function mkLayer(w, h) { const c = document.createElement('canvas'); c.width = Math.max(1, Math.round(w)); c.height = Math.max(1, Math.round(h)); return c; }
+function buildLayers() {
+  let c, g, gr;
+  // Grundverlauf Schacht (vertikal): Petrol oben → Nebel → Abgrund
+  c = LAYERS.bg = mkLayer(4, 256); g = c.getContext('2d'); gr = g.createLinearGradient(0, 0, 0, 256);
+  gr.addColorStop(0, PAL.top); gr.addColorStop(0.7, PAL.fog); gr.addColorStop(1, PAL.abyss); g.fillStyle = gr; g.fillRect(0, 0, 4, 256);
+  // Zylinder-Schattierung (horizontal)
+  c = LAYERS.cyl = mkLayer(256, 4); g = c.getContext('2d'); gr = g.createLinearGradient(0, 0, 256, 0);
+  gr.addColorStop(0,'rgba(5,7,15,.85)'); gr.addColorStop(0.22,'rgba(5,7,15,.25)'); gr.addColorStop(0.5,'rgba(5,7,15,0)');
+  gr.addColorStop(0.78,'rgba(5,7,15,.25)'); gr.addColorStop(1,'rgba(5,7,15,.85)'); g.fillStyle = gr; g.fillRect(0, 0, 256, 4);
+  // Nebel unten
+  c = LAYERS.fog = mkLayer(4, 128); g = c.getContext('2d'); gr = g.createLinearGradient(0, 0, 0, 128);
+  gr.addColorStop(0, 'rgba(11,20,38,0)'); gr.addColorStop(0.6, 'rgba(11,20,38,.6)'); gr.addColorStop(1, 'rgba(5,7,15,.92)'); g.fillStyle = gr; g.fillRect(0, 0, 4, 128);
+  // Seitenwände (Fuge → Stein)
+  for (const side of SIDES) {
+    c = mkLayer(64, 4); g = c.getContext('2d'); gr = g.createLinearGradient(0, 0, 64, 0);
+    if (side < 0) { gr.addColorStop(0, PAL.joint); gr.addColorStop(1, PAL.stone); } else { gr.addColorStop(0, PAL.stone); gr.addColorStop(1, PAL.joint); }
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 4); if (side < 0) LAYERS.sideL = c; else LAYERS.sideR = c;
+  }
+  // Mondlicht-Kegel und Rand-Vignette: weiche Verläufe → 1/4 Geräteauflösung reicht
+  const q = Math.max(0.25, scale * dpr / 4);
+  c = LAYERS.moon = mkLayer(W * q, WORLD_H * q); g = c.getContext('2d'); g.scale(c.width / W, c.height / WORLD_H);
+  gr = g.createRadialGradient(W/2, -60, 10, W/2, -60, WORLD_H*0.75);
+  gr.addColorStop(0, 'rgba(159,216,255,.24)'); gr.addColorStop(0.5, 'rgba(159,216,255,.07)'); gr.addColorStop(1, 'rgba(159,216,255,0)');
+  g.fillStyle = gr; g.beginPath(); g.moveTo(W/2-60,-20); g.lineTo(W/2+60,-20); g.lineTo(W*0.95, WORLD_H*0.8); g.lineTo(W*0.05, WORLD_H*0.8); g.closePath(); g.fill();
+  c = LAYERS.edge = mkLayer(W * q, WORLD_H * q); g = c.getContext('2d'); g.scale(c.width / W, c.height / WORLD_H);
+  gr = g.createRadialGradient(W/2, WORLD_H/2, WORLD_H*0.4, W/2, WORLD_H/2, WORLD_H*0.8);
+  gr.addColorStop(0, 'rgba(226,40,60,0)'); gr.addColorStop(1, 'rgba(226,40,60,.13)'); g.fillStyle = gr; g.fillRect(0, 0, W, WORLD_H);
+}
+/* Gradient-Cache für Figuren (lokale Koordinaten, nur Haupt-Canvas; Icons zeichnen ungecacht) */
+const GC = { head:{}, krab:[], bat:[], spike:{}, barrel:null, pickup:null, coin:null, plant:null };
 function hash(n) { const x = Math.sin(n*127.1)*43758.5453; return x - Math.floor(x); }
 
 function drawBackground() {
-  const g = ctx.createLinearGradient(0,0,0,WORLD_H);
-  g.addColorStop(0, PAL.top); g.addColorStop(0.35, '#0f2238'); g.addColorStop(0.7, PAL.fog); g.addColorStop(1, PAL.abyss);
-  ctx.fillStyle = g; ctx.fillRect(0,0,W,WORLD_H);
+  ctx.drawImage(LAYERS.bg, 0, 0, W, WORLD_H);
   // far back wall (parallax 0.55): curved brick courses
   const bh = 30, off = (G.bgOff*0.55) % (bh*2);
   for (let y = -off - bh; y < WORLD_H + bh; y += bh) {
@@ -1060,32 +1372,23 @@ function drawBackground() {
     for (let x = WALL_W - 52 + shift; x < W - WALL_W + 52; x += 52) {
       const n = hash(rowIdx*31 + Math.floor(x/52));
       const depthFade = clamp(y / WORLD_H, 0, 1);
-      ctx.fillStyle = `rgba(${28+n*10|0},${40+n*12|0},${56+n*14|0},${0.55 - depthFade*0.35})`;
+      // Palette-Stein, Variation nur über Alpha (keine Farb-Strings pro Ziegel)
+      ctx.fillStyle = PAL.stone; ctx.globalAlpha = (0.55 - depthFade*0.35) * (0.8 + n*0.4);
       ctx.fillRect(x+2, y+2, 48, bh-4);
-      if (n > 0.86) { ctx.fillStyle = `rgba(47,91,74,${0.35 - depthFade*0.2})`; ctx.fillRect(x+4, y+bh-8, 20+n*20, 5); }
+      if (n > 0.86) { ctx.fillStyle = PAL.moss; ctx.globalAlpha = 0.35 - depthFade*0.2; ctx.fillRect(x+4, y+bh-8, 20+n*20, 5); }
     }
   }
-  // cylinder shading: darker toward the sides
-  const cg = ctx.createLinearGradient(0,0,W,0);
-  cg.addColorStop(0,'rgba(5,7,15,.85)'); cg.addColorStop(0.22,'rgba(5,7,15,.25)'); cg.addColorStop(0.5,'rgba(5,7,15,0)');
-  cg.addColorStop(0.78,'rgba(5,7,15,.25)'); cg.addColorStop(1,'rgba(5,7,15,.85)');
-  ctx.fillStyle = cg; ctx.fillRect(0,0,W,WORLD_H);
-  // back-wall cracks of plants are drawn on this layer
-  for (const e of G.ents) if ((e.type === 'beisspflanze' || e.type === 'spuckpflanze') && e.state !== 'pending') drawPlantCrack(e);
-  // moonlight cone from above (additive)
-  ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  const mg = ctx.createRadialGradient(W/2, -60, 10, W/2, -60, WORLD_H*0.75);
-  mg.addColorStop(0, 'rgba(159,216,255,.24)'); mg.addColorStop(0.5, 'rgba(159,216,255,.07)'); mg.addColorStop(1, 'rgba(159,216,255,0)');
-  ctx.fillStyle = mg; ctx.beginPath(); ctx.moveTo(W/2-60,-20); ctx.lineTo(W/2+60,-20); ctx.lineTo(W*0.95, WORLD_H*0.8); ctx.lineTo(W*0.05, WORLD_H*0.8); ctx.closePath(); ctx.fill();
-  ctx.restore();
+  ctx.globalAlpha = 1;
+  // cylinder shading: darker toward the sides (vorgerendert)
+  ctx.drawImage(LAYERS.cyl, 0, 0, W, WORLD_H);
+  // moonlight cone from above (additive, vorgerendert in 1/4 Auflösung)
+  ctx.globalCompositeOperation = 'lighter'; ctx.drawImage(LAYERS.moon, 0, 0, W, WORLD_H); ctx.globalCompositeOperation = 'source-over';
 }
 function drawSideWalls() {
   const bh = 34, off = G.sideOff % (bh*2);
-  for (const side of [-1,1]) {
+  for (const side of SIDES) {
     const x0 = side < 0 ? 0 : W - WALL_W;
-    const sg = ctx.createLinearGradient(x0,0,x0+WALL_W,0);
-    if (side < 0) { sg.addColorStop(0,'#0a121d'); sg.addColorStop(1, PAL.stone); } else { sg.addColorStop(0, PAL.stone); sg.addColorStop(1,'#0a121d'); }
-    ctx.fillStyle = sg; ctx.fillRect(x0, 0, WALL_W, WORLD_H);
+    ctx.drawImage(side < 0 ? LAYERS.sideL : LAYERS.sideR, x0, 0, WALL_W, WORLD_H);
     ctx.strokeStyle = PAL.joint; ctx.lineWidth = 2.5;
     ctx.beginPath();
     for (let y = -off - bh; y < WORLD_H + bh; y += bh) {
@@ -1097,7 +1400,7 @@ function drawSideWalls() {
     // moss patches
     for (let y = -off - bh; y < WORLD_H + bh; y += bh) {
       const ri = Math.floor((y + G.sideOff) / bh);
-      if (hash(ri*7 + side*3) > 0.8) { ctx.fillStyle = 'rgba(47,91,74,.55)'; const mx = side < 0 ? x0 + WALL_W - 9 : x0 + 2; ctx.beginPath(); ctx.ellipse(mx + 3, y + bh*0.5, 5, 10 + hash(ri)*8, 0, 0, Math.PI*2); ctx.fill(); }
+      if (hash(ri*7 + side*3) > 0.8) { ctx.fillStyle = PAL.moss; ctx.globalAlpha = 0.55; const mx = side < 0 ? x0 + WALL_W - 9 : x0 + 2; ctx.beginPath(); ctx.ellipse(mx + 3, y + bh*0.5, 5, 10 + hash(ri)*8, 0, 0, Math.PI*2); ctx.fill(); ctx.globalAlpha = 1; }
     }
     // inner highlight edge (moonlight)
     const ex = side < 0 ? WALL_W : W - WALL_W;
@@ -1108,29 +1411,23 @@ function drawSideWalls() {
 function drawLanterns() {
   for (const d of G.deco) {
     const x = d.side < 0 ? WALL_W + 10 : W - WALL_W - 10, y = d.y;
-    const flick = 0.92 + 0.08*Math.sin(G.time*0.013 + d.seed*5) + 0.05*Math.sin(G.time*0.031 + d.seed);
-    ctx.save(); ctx.globalCompositeOperation = 'lighter';
-    const r = 110 * flick, lg = ctx.createRadialGradient(x, y, 4, x, y, r);
-    lg.addColorStop(0, `rgba(255,179,71,${0.38*flick})`); lg.addColorStop(0.4, `rgba(255,179,71,${0.12*flick})`); lg.addColorStop(1, 'rgba(255,179,71,0)');
-    ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI*2); ctx.fill(); ctx.restore();
+    // Glow: vorgerendertes Sprite aus dem VFX-Modul, Flackern ±8 % (Noise)
+    const flick = vfx.lantern(ctx, x, y, 110, d.seed);
     // bracket + lantern body
-    ctx.strokeStyle = '#2b2f36'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x - d.side*10, y - 20); ctx.lineTo(x, y - 20); ctx.lineTo(x, y - 14); ctx.stroke();
-    ctx.fillStyle = '#2b2f36'; roundRect(ctx, x-8, y-15, 16, 4, 2); ctx.fill(); roundRect(ctx, x-8, y+11, 16, 4, 2); ctx.fill();
-    const bg = ctx.createRadialGradient(x, y, 1, x, y, 10); bg.addColorStop(0, PAL.lanternCore); bg.addColorStop(1, PAL.lantern);
-    ctx.fillStyle = bg; roundRect(ctx, x-6, y-11, 12, 22, 3); ctx.fill();
-    ctx.strokeStyle = '#2b2f36'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y-11); ctx.lineTo(x, y+11); ctx.stroke();
+    ctx.strokeStyle = PAL.iron; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x - d.side*10, y - 20); ctx.lineTo(x, y - 20); ctx.lineTo(x, y - 14); ctx.stroke();
+    ctx.fillStyle = PAL.iron; roundRect(ctx, x-8, y-15, 16, 4, 2); ctx.fill(); roundRect(ctx, x-8, y+11, 16, 4, 2); ctx.fill();
+    ctx.fillStyle = PAL.lantern; roundRect(ctx, x-6, y-11, 12, 22, 3); ctx.fill();
+    ctx.fillStyle = PAL.lanternCore; ctx.globalAlpha = clamp(0.55 + (flick - 1) * 3, 0.3, 0.85); roundRect(ctx, x-4, y-8, 8, 16, 3); ctx.fill(); ctx.globalAlpha = 1;
+    ctx.strokeStyle = PAL.iron; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(x, y-11); ctx.lineTo(x, y+11); ctx.stroke();
   }
 }
-function drawFog() {
-  const fg = ctx.createLinearGradient(0, WORLD_H*0.55, 0, WORLD_H);
-  fg.addColorStop(0, 'rgba(11,20,38,0)'); fg.addColorStop(0.6, 'rgba(8,12,24,.55)'); fg.addColorStop(1, 'rgba(5,7,15,.92)');
-  ctx.fillStyle = fg; ctx.fillRect(0, WORLD_H*0.55, W, WORLD_H*0.45);
-}
-function drawDust() {
-  for (const d of G.dust) {
-    ctx.fillStyle = d.ember ? `rgba(255,179,71,${d.a})` : `rgba(159,216,255,${d.a*0.6})`;
-    ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2); ctx.fill();
-  }
+function drawFog() { ctx.drawImage(LAYERS.fog, 0, WORLD_H*0.55, W, WORLD_H*0.45); }
+function drawDust() {   // feste Palettenfarbe + globalAlpha statt Farb-String pro Staubkorn
+  ctx.fillStyle = PAL.lantern;
+  for (const d of G.dust) if (d.ember) { ctx.globalAlpha = d.a; ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2); ctx.fill(); }
+  ctx.fillStyle = PAL.moon;
+  for (const d of G.dust) if (!d.ember) { ctx.globalAlpha = d.a*0.6; ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2); ctx.fill(); }
+  ctx.globalAlpha = 1;
 }
 function roundRect(c, x, y, w, h, r) { r = Math.min(r, w/2, h/2); c.beginPath(); c.moveTo(x+r,y); c.arcTo(x+w,y,x+w,y+h,r); c.arcTo(x+w,y+h,x,y+h,r); c.arcTo(x,y+h,x,y,r); c.arcTo(x,y,x+w,y,r); c.closePath(); }
 
@@ -1141,19 +1438,8 @@ function drawRope() {
     ropeLine(W/2, ANCHOR_Y, W/2 + 20*k, CUT_Y - 10 - k*40); return;
   }
   const e = ropeEnd();
-  const cutter = G.ents.find(x => x.type === 'seilschneider' && x.state === 'cut');
   ropeLine(W/2, ANCHOR_Y, e.x, e.y);
-  if (cutter) { // cut progress ring on the rope
-    const x = ropeXAt(CUT_Y + 8), y = CUT_Y + 8;
-    ctx.save();
-    ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(5,7,15,.75)'; ctx.beginPath(); ctx.arc(x, y, 13, 0, Math.PI*2); ctx.stroke();
-    ctx.strokeStyle = '#E2283C'; ctx.shadowColor = '#E2283C'; ctx.shadowBlur = 10;
-    ctx.beginPath(); ctx.arc(x, y, 13, -Math.PI/2, -Math.PI/2 + Math.PI*2*cutter.prog); ctx.stroke();
-    ctx.restore();
-    // fraying fibres
-    ctx.strokeStyle = PAL.rope; ctx.lineWidth = 1;
-    for (let i=0;i<4;i++) { const a = G.time*0.02 + i*1.7; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + Math.cos(a)*7*cutter.prog, y + Math.sin(a)*5*cutter.prog); ctx.stroke(); }
-  }
+  // Kein Fortschrittsring/Warnmarker mehr: Seilschneider-Telegraph = Sägebewegung + vfx.ropeFray (Fasern) + Sound
 }
 function ropeLine(x0, y0, x1, y1) {
   ctx.save(); ctx.lineCap = 'round';
@@ -1167,37 +1453,47 @@ function ropeLine(x0, y0, x1, y1) {
    Chibi ninja (head ≈ 45 % of height), eye slit only, long red scarf, two short blades. */
 function drawBlade(c, side, angle, wpn, glow) {
   c.save(); c.rotate(angle);
-  if (glow) { c.shadowColor = wpn.trail; c.shadowBlur = 14; }
+  // kein shadowBlur mehr – der Glow kommt vom Hieb-Trail des VFX-Moduls
   const L = wpn.bladeLen;
   c.fillStyle = wpn.steel; c.beginPath(); c.moveTo(0, -2.2); c.lineTo(L, -1); c.lineTo(L + 5, 0.8); c.lineTo(0, 2.6); c.closePath(); c.fill();
-  c.shadowBlur = 0;
-  c.strokeStyle = 'rgba(255,255,255,.85)'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(2, -1.6); c.lineTo(L, -0.6); c.stroke();
-  c.fillStyle = '#2b2f36'; c.fillRect(-5, -3.5, 5, 7);   // grip
+  c.strokeStyle = 'rgba(244,241,234,.85)'; c.lineWidth = 0.8; c.beginPath(); c.moveTo(2, -1.6); c.lineTo(L, -0.6); c.stroke();
+  c.fillStyle = PAL.suitShade; c.fillRect(-5, -3.5, 5, 7);   // grip
   c.fillStyle = '#E2283C'; c.fillRect(-1, -4, 2, 8);    // guard accent
   c.restore();
 }
+const SCARF_X = new Float32Array(8), SCARF_Y = new Float32Array(8);
 function drawScarf(c, ox, oy, wind, t, len, out) {
   const o = out || Loadout.outfit;
   c.save(); c.fillStyle = o.scarf; c.strokeStyle = o.scarf; c.lineCap = 'round';
-  const pts = []; const segs = 7;
-  for (let i=0;i<=segs;i++) { const k = i/segs; pts.push([ox + wind*len*k, oy + 4*k + Math.sin(t*10 - i*0.9)*(2 + 7*k) * (0.6 + Math.abs(wind)*0.6)]); }
-  for (let i=0;i<segs;i++) { c.lineWidth = 7 - i*0.7; c.beginPath(); c.moveTo(pts[i][0], pts[i][1]); c.lineTo(pts[i+1][0], pts[i+1][1]); c.stroke(); }
+  const segs = 7, px = SCARF_X, py = SCARF_Y;   // vorab allokierte Puffer statt Arrays pro Aufruf
+  for (let i=0;i<=segs;i++) { const k = i/segs; px[i] = ox + wind*len*k; py[i] = oy + 4*k + Math.sin(t*10 - i*0.9)*(2 + 7*k) * (0.6 + Math.abs(wind)*0.6); }
+  for (let i=0;i<segs;i++) { c.lineWidth = 7 - i*0.7; c.beginPath(); c.moveTo(px[i], py[i]); c.lineTo(px[i+1], py[i+1]); c.stroke(); }
   c.restore();
 }
+function mkHeadGrad(c, x, y, r, o) {   // Mondlicht-Kante (#3A5670) → Anzug → Schatten
+  const g = c.createRadialGradient(x - r*0.35, y - r*0.4, r*0.2, x, y, r*1.05);
+  g.addColorStop(0, PAL.edge); g.addColorStop(0.5, o.suit); g.addColorStop(1, o.shade); return g;
+}
 function drawHead(c, x, y, r, o, t, blink) {
-  const hg = c.createRadialGradient(x - r*0.35, y - r*0.4, r*0.2, x, y, r*1.05);
-  hg.addColorStop(0, '#34428a'); hg.addColorStop(0.5, o.suit); hg.addColorStop(1, o.shade);
+  let hg;
+  if (c === ctx && x === 0 && y < 0) { const m = GC.head[o.id] || (GC.head[o.id] = {}), k = r * 1000 - y; hg = m[k] || (m[k] = mkHeadGrad(c, x, y, r, o)); }
+  else hg = mkHeadGrad(c, x, y, r, o);
   c.fillStyle = hg; c.beginPath(); c.arc(x, y, r, 0, Math.PI*2); c.fill();
   // eye slit
   c.fillStyle = o.skin; roundRect(c, x - r*0.72, y - r*0.2, r*1.44, r*0.42, r*0.2); c.fill();
   c.fillStyle = '#121833';
   const eh = blink ? 0.6 : r*0.13;
   c.beginPath(); c.ellipse(x - r*0.3, y + r*0.01, r*0.11, eh, 0, 0, Math.PI*2); c.ellipse(x + r*0.3, y + r*0.01, r*0.11, eh, 0, 0, Math.PI*2); c.fill();
-  c.fillStyle = '#fff'; c.beginPath(); c.arc(x - r*0.26, y - r*0.04, r*0.04, 0, Math.PI*2); c.arc(x + r*0.34, y - r*0.04, r*0.04, 0, Math.PI*2); c.fill();
+  c.fillStyle = PAL.text; c.beginPath(); c.arc(x - r*0.26, y - r*0.04, r*0.04, 0, Math.PI*2); c.arc(x + r*0.34, y - r*0.04, r*0.04, 0, Math.PI*2); c.fill();
   // hood knot + rim light
   c.fillStyle = o.shade; c.beginPath(); c.ellipse(x + r*0.75, y - r*0.55, r*0.22, r*0.14, -0.6, 0, Math.PI*2); c.fill();
   c.strokeStyle = 'rgba(159,216,255,.45)'; c.lineWidth = 1.5; c.beginPath(); c.arc(x, y, r - 1, -Math.PI*0.95, -Math.PI*0.45); c.stroke();
 }
+function mkBarrelGrad(c) {
+  const g = c.createLinearGradient(-30, 0, 30, 0);
+  g.addColorStop(0, PAL.woodDark); g.addColorStop(0.45, PAL.wood); g.addColorStop(0.6, PAL.wood); g.addColorStop(1, PAL.woodDark); return g;
+}
+const STAVES = [-0.62, -0.25, 0.12, 0.48], HOOPS = [-12, 24];
 function drawBarrelNinja(c, x, y, rot, opts = {}) {
   const o = Loadout.outfit, wpn = Loadout.weapon, t = opts.t ?? G.time/1000;
   const slashDir = opts.slashDir || 0, slashK = opts.slashK || 0;
@@ -1207,14 +1503,16 @@ function drawBarrelNinja(c, x, y, rot, opts = {}) {
   c.strokeStyle = PAL.rope; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, -74); c.lineTo(-25, -22); c.moveTo(0, -74); c.lineTo(25, -22); c.stroke();
   c.fillStyle = PAL.rope; c.beginPath(); c.arc(0, -74, 4, 0, Math.PI*2); c.fill();
   // back rim interior
-  c.fillStyle = '#24150a'; c.beginPath(); c.ellipse(0, -22, 26, 7, 0, 0, Math.PI*2); c.fill();
+  c.fillStyle = PAL.woodDark; c.beginPath(); c.ellipse(0, -22, 26, 7, 0, 0, Math.PI*2); c.fill();
+  c.fillStyle = 'rgba(5,7,15,.65)'; c.fill();
   // ninja torso + head inside
   const wind = opts.wind ?? -clamp(N.vx/400, -1, 1);
-  drawScarf(c, 4, -32, (wind > 0 ? 1 : -1) * (1.2 + Math.abs(wind)), t, 26, o);
+  if (c === ctx && opts.t == null) scarf.drawLocal(c, 4, -32, x, y, rot, { time: G.time, color: o.scarf, width: 7, length: 26, boost: 1 + Math.abs(wind) * 0.5, fall: G.scrollPx });
+  else drawScarf(c, 4, -32, (wind > 0 ? 1 : -1) * (1.2 + Math.abs(wind)), t, 26, o);   // Icons bleiben statisch
   c.fillStyle = o.suit; roundRect(c, -13, -36, 26, 18, 7); c.fill();
   c.fillStyle = o.scarf; roundRect(c, -12, -37, 24, 6, 3); c.fill();
   // arms + blades (both out to the sides like in the concept)
-  for (const s of [-1, 1]) {
+  for (const s of SIDES) {
     const ext = (slashDir === s) ? slashK : 0;
     const hx = s*(24 + ext*8), hy = -26 + 6*(1-ext) - ext*4;
     c.strokeStyle = o.suit; c.lineWidth = 6; c.lineCap = 'round'; c.beginPath(); c.moveTo(s*10, -32); c.quadraticCurveTo(s*18, -30, hx, hy); c.stroke();
@@ -1226,17 +1524,16 @@ function drawBarrelNinja(c, x, y, rot, opts = {}) {
   }
   drawHead(c, 0, -50, 17, o, t, (t % 3.7) < 0.12);
   // barrel body (in front)
-  const bg = c.createLinearGradient(-30, 0, 30, 0);
-  bg.addColorStop(0, '#3e240f'); bg.addColorStop(0.2, '#5A3518'); bg.addColorStop(0.45, '#a8743f'); bg.addColorStop(0.6, '#8A5A2E'); bg.addColorStop(1, '#3e240f');
+  const bg = (c === ctx && GC.barrel) || mkBarrelGrad(c); if (c === ctx) GC.barrel = bg;
   c.fillStyle = bg; c.beginPath(); c.moveTo(-26, -22); c.quadraticCurveTo(-36, 8, -25, 36); c.lineTo(25, 36); c.quadraticCurveTo(36, 8, 26, -22); c.closePath(); c.fill();
-  c.strokeStyle = 'rgba(40,20,8,.6)'; c.lineWidth = 1.2;
-  for (const sx of [-0.62, -0.25, 0.12, 0.48]) { c.beginPath(); c.moveTo(sx*26, -21); c.quadraticCurveTo(sx*36, 8, sx*25, 35); c.stroke(); }
-  for (const hy of [-12, 24]) {
+  c.strokeStyle = 'rgba(5,7,15,.45)'; c.lineWidth = 1.2;
+  for (const sx of STAVES) { c.beginPath(); c.moveTo(sx*26, -21); c.quadraticCurveTo(sx*36, 8, sx*25, 35); c.stroke(); }
+  for (const hy of HOOPS) {
     const wv = hy < 0 ? 31 : 31;
-    c.strokeStyle = '#4A4F57'; c.lineWidth = 5; c.beginPath(); c.moveTo(-wv + 1, hy); c.quadraticCurveTo(0, hy + 5, wv - 1, hy); c.stroke();
-    c.strokeStyle = '#9AA3AD'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(-wv + 4, hy - 1.5); c.quadraticCurveTo(0, hy + 3.5, wv - 4, hy - 1.5); c.stroke();
+    c.strokeStyle = PAL.iron; c.lineWidth = 5; c.beginPath(); c.moveTo(-wv + 1, hy); c.quadraticCurveTo(0, hy + 5, wv - 1, hy); c.stroke();
+    c.strokeStyle = PAL.ironGlint; c.lineWidth = 1.2; c.beginPath(); c.moveTo(-wv + 4, hy - 1.5); c.quadraticCurveTo(0, hy + 3.5, wv - 4, hy - 1.5); c.stroke();
   }
-  c.strokeStyle = '#5A3518'; c.lineWidth = 3.5; c.beginPath(); c.ellipse(0, -22, 26, 7, 0, 0.05, Math.PI - 0.05); c.stroke();
+  c.strokeStyle = PAL.woodDark; c.lineWidth = 3.5; c.beginPath(); c.ellipse(0, -22, 26, 7, 0, 0.05, Math.PI - 0.05); c.stroke();
   c.strokeStyle = 'rgba(255,226,168,.25)'; c.lineWidth = 2; c.beginPath(); c.moveTo(-14, -16); c.quadraticCurveTo(-20, 8, -14, 32); c.stroke();
   c.restore();
 }
@@ -1247,7 +1544,8 @@ function drawPureNinja(c, x, y, rot, opts = {}) {
   // rope tied to the back
   c.strokeStyle = PAL.rope; c.lineWidth = 2; c.beginPath(); c.moveTo(0, -40); c.lineTo(0, -4); c.stroke();
   const wind = opts.wind ?? -clamp(N.vx/300, -1, 1);
-  drawScarf(c, 3, -14, (wind > 0 ? 1 : -1) * (1.8 + Math.abs(wind)), t*1.6, 34, o);
+  if (c === ctx && opts.t == null) scarf.drawLocal(c, 3, -14, x, y, rot, { time: G.time, color: o.scarf, width: 7, length: 34, boost: 1.6 + Math.abs(wind) * 0.5, fall: G.scrollPx });
+  else drawScarf(c, 3, -14, (wind > 0 ? 1 : -1) * (1.8 + Math.abs(wind)), t*1.6, 34, o);
   // legs (cycling when running on the wall)
   const lp = run ? Math.sin(t*28) : 0;
   c.strokeStyle = o.shade; c.lineWidth = 6; c.lineCap = 'round';
@@ -1255,7 +1553,7 @@ function drawPureNinja(c, x, y, rot, opts = {}) {
   // body
   c.fillStyle = o.suit; roundRect(c, -10, -10, 20, 19, 7); c.fill();
   c.fillStyle = o.scarf; roundRect(c, -10, 0, 20, 3.5, 1.5); c.fill();
-  for (const s of [-1, 1]) {
+  for (const s of SIDES) {
     const ext = (slashDir === s) ? slashK : 0;
     const hx = s*(16 + ext*6), hy = -2 + 4*(1-ext);
     c.strokeStyle = o.suit; c.lineWidth = 5; c.beginPath(); c.moveTo(s*7, -6); c.lineTo(hx, hy); c.stroke();
@@ -1269,6 +1567,7 @@ function drawNinja() {
   let x = N.x, y = N.y, rot = ninjaRot();
   if (N.dead) rot += N.fall.spin * ((performance.now() - G.overAt) / 1000);
   const blink = N.inv > 0 && !N.dead && Math.floor(G.time / 70) % 2 === 0;
+  speed.draw(ctx);   // VFX Phase 2: zeichnet nur, wenn ohne Fass Linien aktiv sind
   if (blink) ctx.globalAlpha = 0.45;
   if (N.barrel) drawBarrelNinja(ctx, x, y, rot, { slashDir:N.slashDir, slashK });
   else {
@@ -1278,192 +1577,52 @@ function drawNinja() {
     if (sideK > 0.6 && !N.dead) { r = lerp(rot, -side * Math.PI/2, smooth((sideK - 0.6)/0.4)); run = 1; x += side * 10 * sideK; y -= 10 * sideK; }
     if (N.flipT > 0) r += (1 - N.flipT) * Math.PI * 2 * -1;
     if (N.vv > 0 && !N.dead) r += Math.sin(G.time*0.02) * 0.1;
-    // speed lines
-    ctx.strokeStyle = 'rgba(159,216,255,.25)'; ctx.lineWidth = 1.5;
-    for (let i=0;i<5;i++) { const lx = N.x + (hash(i*13 + Math.floor(G.time/90))-0.5)*50, ly = N.y + 30 + hash(i*7 + Math.floor(G.time/90))*30;
-      ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx, ly + 22); ctx.stroke(); }
     drawPureNinja(ctx, x, y, r, { slashDir:N.slashDir, slashK, run });
   }
   ctx.globalAlpha = 1;
 }
 
 /* ===================================================================== RENDER: ENEMIES */
-function drawKrabbler(e) {
-  const x = e.x, y = e.y + (e.yOff || 0);
-  let facing = -e.side;             // toward centre
-  let ang = e.onWall && e.state !== 'windup' ? -Math.PI/2 : (facing > 0 ? 0 : Math.PI);   // vertical on the wall, horizontal when attacking
-  let shake = 0, glow = 0.6;
-  if (e.state === 'windup') { const p = e.t / e.windupMs; ang = lerp(-Math.PI/2, facing > 0 ? 0 : -Math.PI, smooth(p*2.2));
-    shake = p > 0.55 ? Math.sin(e.t*0.12) * 2.5 : 0; glow = 0.6 + p*0.9; }
-  if (e.state === 'attack' || e.state === 'recover') glow = 1.4;
-  ctx.save(); ctx.translate(x + shake + (e.state === 'windup' ? e.side*smooth(e.t/e.windupMs)*6 : 0), y); ctx.rotate(ang);
-  // crack in the wall behind it (it broke out of the wall)
-  // segmented isopod body: head at +x
-  const segs = 5;
-  for (let i = segs-1; i >= 0; i--) {
-    const sx = -i*8.5, sr = 11 - Math.abs(i-1.5)*1.3;
-    const sg = ctx.createRadialGradient(sx-2, -3, 1, sx, 0, sr*1.2);
-    sg.addColorStop(0, '#5a6070'); sg.addColorStop(1, '#2a2d36');
-    ctx.fillStyle = sg; ctx.beginPath(); ctx.ellipse(sx, 0, 6.5, sr, 0, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#8C8F99';
-    for (const s of [-1,1]) { ctx.beginPath(); ctx.moveTo(sx - 3, s*(sr-2)); ctx.lineTo(sx, s*(sr + 7)); ctx.lineTo(sx + 3, s*(sr-2)); ctx.closePath(); ctx.fill(); }
-    // legs
-    ctx.strokeStyle = '#23262e'; ctx.lineWidth = 1.6; const lw = Math.sin(e.anim*18 + i) * 2;
-    ctx.beginPath(); ctx.moveTo(sx, sr-3); ctx.lineTo(sx + lw, sr+3); ctx.moveTo(sx, -sr+3); ctx.lineTo(sx - lw, -sr-3); ctx.stroke();
-  }
-  // head
-  ctx.fillStyle = '#3B3F4A'; ctx.beginPath(); ctx.ellipse(8, 0, 8, 9, 0, 0, Math.PI*2); ctx.fill();
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(255,90,42,${Math.min(1, glow)})`; ctx.shadowColor = '#FF5A2A'; ctx.shadowBlur = 8*glow;
-  ctx.beginPath(); ctx.arc(12, -4, 2.2, 0, Math.PI*2); ctx.arc(12, 4, 2.2, 0, Math.PI*2); ctx.fill(); ctx.restore();
-  ctx.strokeStyle = '#8C8F99'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(15, -3); ctx.lineTo(21, -6); ctx.moveTo(15, 3); ctx.lineTo(21, 6); ctx.stroke();
-  ctx.restore();
-}
-function drawWallCrack(x, y, side, k) {
-  ctx.save(); ctx.strokeStyle = `rgba(5,7,15,${0.8*k})`; ctx.lineWidth = 2;
-  ctx.beginPath();
-  for (let i=0;i<5;i++) { const a = (i/5)*Math.PI - Math.PI/2; ctx.moveTo(x - side*4, y); ctx.lineTo(x - side*4 + Math.cos(a)*16*k*-side*-1 * (i%2?0.6:1), y + Math.sin(a)*18*k); }
-  ctx.stroke(); ctx.restore();
-}
-function drawBat(e) {
-  const x = e.x, y = e.y;
-  const hanging = e.state === 'scroll' || e.state === 'idle' || e.state === 'leave';
-  const wind = e.state === 'windup' ? e.t / e.windupMs : 0;
-  ctx.save(); ctx.translate(x, y); ctx.scale(1.35, 1.35);
-  if (hanging || e.state === 'windup') { ctx.rotate(Math.PI); }   // hangs upside down on the wall
-  const flap = e.state === 'attack' ? Math.sin(e.t * 0.03) : (e.state === 'windup' ? Math.sin(e.t*0.02)*0.5*wind : 0);
-  const spread = hanging ? 0.25 : (e.state === 'windup' ? 0.25 + 0.75*smooth(wind*1.5) : 1);
-  const dir = e.state === 'attack' ? (e.side < 0 ? 1 : -1) : 1;
-  ctx.scale(dir, 1);
-  // sickle wings (metallic)
-  for (const s of [-1, 1]) {
-    ctx.save(); ctx.scale(s, 1); ctx.rotate(-flap*0.6);
-    const wg = ctx.createLinearGradient(0, -10, 30*spread, 10);
-    wg.addColorStop(0, '#6b7486'); wg.addColorStop(0.6, '#B9C3D6'); wg.addColorStop(1, '#ffffff');
-    ctx.fillStyle = wg;
-    ctx.beginPath(); ctx.moveTo(4, -4); ctx.quadraticCurveTo(22*spread, -22*spread - 4, 34*spread + 2, -4*spread);
-    ctx.quadraticCurveTo(22*spread, -6, 6, 6); ctx.closePath(); ctx.fill();
-    ctx.restore();
-  }
-  // flash on the wings shortly before the attack
-  if (e.state === 'windup' && wind > 0.6 && Math.floor(e.t/60) % 2 === 0) {
-    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.beginPath(); ctx.arc(0, -4, 30, 0, Math.PI*2); ctx.fill(); ctx.restore();
-  }
-  ctx.fillStyle = '#241B3A'; ctx.beginPath(); ctx.ellipse(0, 0, 8, 10, 0, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(-6, -7); ctx.lineTo(-4, -15); ctx.lineTo(-1, -8); ctx.moveTo(6, -7); ctx.lineTo(4, -15); ctx.lineTo(1, -8); ctx.fill();
-  ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = '#FFC23A'; ctx.shadowColor = '#FFC23A'; ctx.shadowBlur = 6;
-  ctx.beginPath(); ctx.arc(-3, -3, 1.8, 0, Math.PI*2); ctx.arc(3, -3, 1.8, 0, Math.PI*2); ctx.fill(); ctx.restore();
-  ctx.restore();
-}
-function drawCutter(e) {
-  const x = e.x, y = e.y, cutting = e.state === 'cut';
-  ctx.save(); ctx.translate(x, y);
-  // red "!" glow on the rope above the goblin (it is its own announcement, not a grid marker)
-  ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  const pulse = 0.55 + 0.45*Math.sin(G.time*0.012);
-  const rg = ctx.createRadialGradient(-e.side*13, -6, 2, -e.side*13, -6, 30); rg.addColorStop(0, `rgba(226,40,60,${0.55*pulse})`); rg.addColorStop(1, 'rgba(226,40,60,0)');
-  ctx.fillStyle = rg; ctx.beginPath(); ctx.arc(-e.side*13, -6, 30, 0, Math.PI*2); ctx.fill(); ctx.restore();
-  ctx.scale(e.side, 1);
-  // body
-  ctx.fillStyle = '#3d6230'; roundRect(ctx, -6, -2, 13, 16, 5); ctx.fill();
-  ctx.strokeStyle = '#3d6230'; ctx.lineWidth = 3.5; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(-2, 13); ctx.lineTo(-8, 20); ctx.moveTo(4, 13); ctx.lineTo(-4, 22); ctx.stroke();   // legs wrapped around the rope
-  // head with big ears
-  const hg = ctx.createRadialGradient(-2, -12, 1, 0, -10, 12); hg.addColorStop(0, '#79a85a'); hg.addColorStop(1, '#4E7A3A');
-  ctx.fillStyle = hg; ctx.beginPath(); ctx.arc(1, -10, 9, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(7, -13); ctx.lineTo(19, -19); ctx.lineTo(8, -7); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(-5, -14); ctx.lineTo(-12, -22); ctx.lineTo(-7, -9); ctx.fill();
-  ctx.fillStyle = '#ffdf5a'; ctx.beginPath(); ctx.arc(-3, -11, 1.8, 0, Math.PI*2); ctx.arc(3, -11, 1.8, 0, Math.PI*2); ctx.fill();
-  ctx.fillStyle = '#1a2a12'; ctx.fillRect(-3, -6, 6, 1.5);
-  // scissor claws snipping at the rope
-  const sn = cutting ? Math.abs(Math.sin(G.time*0.03)) : 0.4;
-  ctx.strokeStyle = '#3d6230'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(-4, 2); ctx.lineTo(-11, 6); ctx.stroke();
-  ctx.save(); ctx.translate(-12, 6);
-  ctx.fillStyle = '#C7CED6';
-  for (const s of [-1, 1]) { ctx.save(); ctx.rotate(Math.PI + s*sn*0.5); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(11, s*-1.5); ctx.lineTo(12, s*1.5); ctx.lineTo(0, s*2.5); ctx.closePath(); ctx.fill(); ctx.restore(); }
-  ctx.restore();
-  ctx.restore();
-  if (cutting && Math.random() < 0.3) G.particles.push({ x:ropeXAt(CUT_Y+8), y:CUT_Y+8, vx:rand(-60,60), vy:rand(-40,20), r:1.3, life:250, max:250, c:'#FFE2A8', g:300 });
-}
+function drawKrabbler(e) { ea.drawEnt(ctx, e); }   // VFX Phase 2: vfx/enemy-anim.js (Ausholen = einziger Telegraph)
+function drawBat(e) { ea.drawEnt(ctx, e); }
+function drawCutter(e) { if (e.state !== 'pending') ea.drawEnt(ctx, e); }
 function drawSpikes(e) {
   const tip = spikeTip(e), wx = e.side < 0 ? WALL_W : W - WALL_W, dir = -e.side;
   // metal plate on the wall
-  ctx.fillStyle = '#2b3138'; roundRect(ctx, wx - e.side*12 - 6, e.y - 4, 12, e.h + 8, 3); ctx.fill();
+  ctx.fillStyle = PAL.iron; roundRect(ctx, wx - e.side*12 - 6, e.y - 4, 12, e.h + 8, 3); ctx.fill();
   const n = e.h > 60 ? 4 : 2, step = e.h / n;
   for (let i=0;i<n;i++) {
     const cy = e.y + step*(i + 0.5), bw = step*0.42;
-    const sg = ctx.createLinearGradient(wx, cy - bw, wx, cy + bw); sg.addColorStop(0, '#9aa2ad'); sg.addColorStop(0.5, '#6E7682'); sg.addColorStop(1, '#3f454e');
-    ctx.fillStyle = sg; ctx.beginPath(); ctx.moveTo(wx, cy - bw); ctx.lineTo(tip, cy); ctx.lineTo(wx, cy + bw); ctx.closePath(); ctx.fill();
+    const gk = Math.round(bw * 10); let sg = GC.spike[gk];   // vertikaler Verlauf relativ zu cy → je Breite einmal bauen
+    if (!sg) { sg = GC.spike[gk] = ctx.createLinearGradient(0, -bw, 0, bw); sg.addColorStop(0, '#9AA3AD'); sg.addColorStop(0.5, '#6E7682'); sg.addColorStop(1, '#4A4F57'); }
+    ctx.translate(0, cy); ctx.fillStyle = sg; ctx.beginPath(); ctx.moveTo(wx, -bw); ctx.lineTo(tip, 0); ctx.lineTo(wx, bw); ctx.closePath(); ctx.fill(); ctx.translate(0, -cy);
     ctx.fillStyle = '#DDE3EA'; ctx.beginPath(); ctx.moveTo(tip - dir*12, cy - bw*0.22); ctx.lineTo(tip, cy); ctx.lineTo(tip - dir*12, cy + bw*0.22); ctx.closePath(); ctx.fill();
   }
   // metal glint sweeping along
   const gp = ((G.time + e.glint) % 2200) / 2200;
-  if (gp < 0.25) { ctx.save(); ctx.globalCompositeOperation = 'lighter'; const gx = lerp(wx, tip, gp*4);
-    const gg = ctx.createRadialGradient(gx, e.y + e.h/2, 0, gx, e.y + e.h/2, 16); gg.addColorStop(0, 'rgba(255,255,255,.8)'); gg.addColorStop(1, 'rgba(255,255,255,0)');
-    ctx.fillStyle = gg; ctx.beginPath(); ctx.arc(gx, e.y + e.h/2, 16, 0, Math.PI*2); ctx.fill(); ctx.restore(); }
+  if (gp < 0.25) vfx.glow(ctx, lerp(wx, tip, gp*4), e.y + e.h/2, 16, 'spikeTip', 0.8);
 }
-function drawPlantCrack(e) {
-  const x = colX(e.c), y = rowY(e.r);
-  const def = BALANCE.enemies[e.type];
-  const k = e.state === 'crack' ? clamp(e.t / e.crackMs, 0, 1) : (e.state === 'retract' ? 1 - e.t/def.retractMs : 1);
-  ctx.save(); ctx.strokeStyle = `rgba(3,5,10,${0.9})`; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
-  for (let i=0;i<7;i++) { const a = i/7*Math.PI*2 + 0.3, l = (16 + hash(i + e.id)*18) * k;
-    ctx.beginPath(); ctx.moveTo(x, y); const mx = x + Math.cos(a)*l*0.5 + (hash(i*3+e.id)-0.5)*6, my = y + Math.sin(a)*l*0.5;
-    ctx.lineTo(mx, my); ctx.lineTo(x + Math.cos(a+0.2)*l, y + Math.sin(a+0.2)*l); ctx.stroke(); }
-  ctx.fillStyle = `rgba(3,5,10,${0.85*k})`; ctx.beginPath(); ctx.ellipse(x, y, 14*k, 11*k, 0, 0, Math.PI*2); ctx.fill();
-  if (e.state === 'crack') { ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(155,227,106,${0.15 + 0.2*k})`; ctx.beginPath(); ctx.arc(x, y, 18*k, 0, Math.PI*2); ctx.fill(); }
-  ctx.restore();
-}
-function drawPlant(e) {
-  if (e.state === 'pending' || e.state === 'crack') return;
-  const x = colX(e.c), y = rowY(e.r), def = BALANCE.enemies[e.type];
-  let s = 1;
-  if (e.state === 'bite') s = 0.4 + 0.8*easeOutBack(clamp(e.t/def.biteMs, 0, 1));
-  if (e.state === 'retract') s = 1 - e.t/def.retractMs;
-  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
-  // vine
-  ctx.strokeStyle = '#2F5B4A'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(0, 8); ctx.quadraticCurveTo(-8, 18, 0, 26); ctx.stroke();
-  // leaves
-  ctx.fillStyle = '#3d7a52'; ctx.beginPath(); ctx.ellipse(-14, 10, 10, 4, -0.6, 0, Math.PI*2); ctx.ellipse(14, 12, 10, 4, 0.6, 0, Math.PI*2); ctx.fill();
-  if (e.type === 'beisspflanze') {
-    const open = e.state === 'bite' ? 1 - clamp(e.t/def.biteMs,0,1)*0.8 : 0.35 + 0.1*Math.sin(G.time*0.01);
-    for (const sgn of [-1, 1]) {
-      ctx.save(); ctx.rotate(sgn * open * 0.7);
-      const hg = ctx.createLinearGradient(0, -20, 0, 0); hg.addColorStop(0, '#7fbf5a'); hg.addColorStop(1, '#2F5B4A');
-      ctx.fillStyle = hg; ctx.beginPath(); ctx.ellipse(0, sgn*-8, 20, 10, 0, sgn < 0 ? Math.PI : 0, sgn < 0 ? Math.PI*2 : Math.PI); ctx.fill();
-      ctx.fillStyle = '#c23a4a'; ctx.beginPath(); ctx.ellipse(0, sgn*-3, 15, 4, 0, 0, Math.PI*2); ctx.fill();
-      ctx.fillStyle = '#F4F1EA'; for (let i=-3;i<=3;i++) { ctx.beginPath(); ctx.moveTo(i*4.5 - 2, sgn*-2); ctx.lineTo(i*4.5, sgn*5); ctx.lineTo(i*4.5 + 2, sgn*-2); ctx.fill(); }
-      ctx.restore();
-    }
-  } else {
-    const a = e.aimDir || 0;
-    ctx.fillStyle = '#3d7a52'; ctx.beginPath(); ctx.arc(0, 0, 13, 0, Math.PI*2); ctx.fill();
-    ctx.save(); ctx.rotate(a); ctx.fillStyle = '#5a9e5a'; roundRect(ctx, 4, -6, 18, 12, 5); ctx.fill();
-    ctx.fillStyle = '#0d1a10'; ctx.beginPath(); ctx.ellipse(22, 0, 3, 5, 0, 0, Math.PI*2); ctx.fill(); ctx.restore();
-    ctx.fillStyle = '#d7ff6a'; ctx.beginPath(); ctx.arc(-4, -4, 2.2, 0, Math.PI*2); ctx.arc(3, -5, 2.2, 0, Math.PI*2); ctx.fill();
-  }
-  ctx.restore();
-}
+function drawPlant(e) { if (e.state !== 'pending') ea.drawEnt(ctx, e, colX(e.c), rowY(e.r)); }
+const PICKUP_HOOPS = [-14, 14];
 function drawPickupBarrel(e) {
   const x = e.x, y = e.y, p = 0.5 + 0.5*Math.sin(G.time*0.008);
-  ctx.save(); ctx.globalCompositeOperation = 'lighter';
-  const g = ctx.createRadialGradient(x, y, 2, x, y, 34); g.addColorStop(0, `rgba(255,179,71,${0.45 + 0.25*p})`); g.addColorStop(1, 'rgba(255,179,71,0)');
-  ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, 34, 0, Math.PI*2); ctx.fill(); ctx.restore();
+  vfx.glow(ctx, x, y, 34, 'lantern', 0.45 + 0.25*p);
   ctx.save(); ctx.translate(x, y); ctx.scale(0.5, 0.5);
-  const bg = ctx.createLinearGradient(-30, 0, 30, 0); bg.addColorStop(0, '#5A3518'); bg.addColorStop(0.5, '#b07a45'); bg.addColorStop(1, '#5A3518');
+  let bg = GC.pickup;
+  if (!bg) { bg = GC.pickup = ctx.createLinearGradient(-30, 0, 30, 0); bg.addColorStop(0, PAL.woodDark); bg.addColorStop(0.5, PAL.wood); bg.addColorStop(1, PAL.woodDark); }
   ctx.fillStyle = bg; ctx.beginPath(); ctx.moveTo(-24, -26); ctx.quadraticCurveTo(-34, 0, -24, 26); ctx.lineTo(24, 26); ctx.quadraticCurveTo(34, 0, 24, -26); ctx.closePath(); ctx.fill();
-  ctx.strokeStyle = '#9AA3AD'; ctx.lineWidth = 5; for (const hy of [-14, 14]) { ctx.beginPath(); ctx.moveTo(-29, hy); ctx.lineTo(29, hy); ctx.stroke(); }
+  ctx.strokeStyle = PAL.ironGlint; ctx.lineWidth = 5; for (const hy of PICKUP_HOOPS) { ctx.beginPath(); ctx.moveTo(-29, hy); ctx.lineTo(29, hy); ctx.stroke(); }
   ctx.restore();
 }
 function drawCoins() {
   for (const c of G.coins) {
     const sx = Math.abs(Math.cos(c.t*3)) * 0.8 + 0.2;
-    ctx.save(); ctx.globalCompositeOperation = 'lighter';
-    const gl = ctx.createRadialGradient(c.x, c.y, 1, c.x, c.y, 18); gl.addColorStop(0, 'rgba(255,179,71,.45)'); gl.addColorStop(1, 'rgba(255,179,71,0)');
-    ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(c.x, c.y, 18, 0, Math.PI*2); ctx.fill(); ctx.restore();
+    vfx.glow(ctx, c.x, c.y, 18, 'lantern', 0.45);
     ctx.save(); ctx.translate(c.x, c.y); ctx.scale(sx, 1);
-    const g = ctx.createRadialGradient(-3, -3, 1, 0, 0, 9); g.addColorStop(0, '#FFE2A8'); g.addColorStop(0.5, '#FFB347'); g.addColorStop(1, '#9a5a00');
+    let g = GC.coin;
+    if (!g) { g = GC.coin = ctx.createRadialGradient(-3, -3, 1, 0, 0, 9); g.addColorStop(0, PAL.lanternCore); g.addColorStop(0.5, PAL.lantern); g.addColorStop(1, PAL.wood); }
     ctx.fillStyle = g; ctx.beginPath(); ctx.arc(0, 0, 8.5, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = 'rgba(120,70,0,.7)'; ctx.beginPath(); for (let i=0;i<4;i++) { const a = i*Math.PI/2 + 0.4; ctx.moveTo(0,0); ctx.lineTo(Math.cos(a)*6, Math.sin(a)*6); ctx.lineTo(Math.cos(a+0.6)*2.5, Math.sin(a+0.6)*2.5); } ctx.fill();
+    ctx.fillStyle = 'rgba(90,53,24,.7)'; ctx.beginPath(); for (let i=0;i<4;i++) { const a = i*Math.PI/2 + 0.4; ctx.moveTo(0,0); ctx.lineTo(Math.cos(a)*6, Math.sin(a)*6); ctx.lineTo(Math.cos(a+0.6)*2.5, Math.sin(a+0.6)*2.5); } ctx.fill();
     ctx.restore();
   }
 }
@@ -1476,56 +1635,46 @@ function drawEnts() {
     else if (e.type === 'fass') drawPickupBarrel(e);
   }
   for (const p of G.projectiles) {
-    ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = 'rgba(155,227,106,.5)'; ctx.beginPath(); ctx.arc(p.x, p.y, 13, 0, Math.PI*2); ctx.fill(); ctx.restore();
-    ctx.fillStyle = '#d7ff6a'; ctx.beginPath(); ctx.arc(p.x, p.y, 7, 0, Math.PI*2); ctx.fill();
+    vfx.glow(ctx, p.x, p.y, 14, '#4E7A3A', 1);
+    ctx.fillStyle = '#E2283C'; ctx.beginPath(); ctx.arc(p.x, p.y, 7, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#2F5B4A'; ctx.lineWidth = 2; ctx.stroke();
   }
 }
 
-/* ===================================================================== RENDER: FX */
-function drawFx() {
-  for (const f of G.fx) {
-    const k = f.t / f.life;
-    if (f.type === 'slash') {
-      // arc trail: 3-4 ghost copies with decreasing alpha, additive cyan
-      ctx.save(); ctx.globalCompositeOperation = 'lighter';
-      const cx = N.x, cy = N.y + (N.barrel ? -18 : -4), R = N.barrel ? 54 : 40, wpn = Loadout.weapon;
-      for (let i=0;i<4;i++) {
-        const kk = clamp(k - i*0.08, 0, 1); if (kk <= 0) continue;
-        const a0 = f.dir > 0 ? -1.2 : Math.PI + 1.2, sweep = f.dir > 0 ? 2.0 : -2.0;
-        const aEnd = a0 + sweep * Math.min(1, kk*2.2);
-        ctx.strokeStyle = wpn.trail; ctx.globalAlpha = (1 - k) * (0.85 - i*0.2); ctx.lineWidth = (7 - i*1.5) * (1 - k*0.5);
-        ctx.shadowColor = wpn.trail; ctx.shadowBlur = 12;
-        ctx.beginPath(); ctx.arc(cx, cy, R + i*3, Math.min(a0, aEnd), Math.max(a0, aEnd)); ctx.stroke();
-      }
-      ctx.restore();
-    } else if (f.type === 'upslash') {
-      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.strokeStyle = Loadout.weapon.trail; ctx.globalAlpha = 1 - k; ctx.lineWidth = 5; ctx.shadowColor = Loadout.weapon.trail; ctx.shadowBlur = 12;
-      const cy = N.y - (N.barrel ? 60 : 30);
-      ctx.beginPath(); ctx.arc(N.x, cy, 30 + k*10, Math.PI*1.15, Math.PI*1.85); ctx.stroke(); ctx.restore();
-    } else if (f.type === 'hitflash') {
-      ctx.save(); ctx.globalCompositeOperation = 'lighter'; ctx.fillStyle = `rgba(255,255,255,${1 - k})`; ctx.beginPath(); ctx.arc(f.x, f.y, 26, 0, Math.PI*2); ctx.fill(); ctx.restore();
-    }
-  }
-}
-function drawParticles() {
-  for (const p of G.particles) {
-    const a = Math.max(0, p.life / p.max);
-    ctx.globalAlpha = a;
-    if (p.kind === 'splinter') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.fillStyle = p.c; ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h); ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fillRect(-p.w/2, -p.h/2, 1.5, p.h); ctx.restore(); }
-    else if (p.kind === 'ring') { ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.rot); ctx.strokeStyle = p.c; ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(0, 0, p.r, p.half ? 0 : Math.PI, p.half ? Math.PI : Math.PI*2); ctx.stroke(); ctx.restore(); }
-    else { ctx.fillStyle = p.c; ctx.beginPath(); ctx.arc(p.x, p.y, p.soft ? p.r*(1.5 - a*0.5) : p.r, 0, Math.PI*2); ctx.fill(); }
-  }
-  ctx.globalAlpha = 1;
-}
+/* ===================================================================== RENDER: FX
+   Hiebe, Treffer, Partikel, Risse, Flash, Shake: vfx/vfx.js (Pool, keine Allocs pro Frame). */
 function drawTexts() {
   ctx.save(); ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   for (const t of G.texts) {
     const k = t.t / t.life;
     ctx.globalAlpha = 1 - Math.max(0, k - 0.6)/0.4;
-    ctx.font = `20px 'Russo One', 'Bungee', Impact, sans-serif`;
+    const sz = t.size || 20, pop = t.t < 120 ? easeOutBack(t.t / 120, 2.2) : 1;
+    ctx.font = `${Math.round(sz * Math.max(0.3, pop))}px 'Russo One', 'Bungee', Impact, sans-serif`;
     ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(5,7,15,.85)'; ctx.strokeText(t.txt, t.x, t.y - k*34);
     ctx.fillStyle = t.col; ctx.fillText(t.txt, t.x, t.y - k*34);
   }
+  ctx.restore();
+}
+/* Rekord-Laterne (v0.3): Die bisher tiefste Tiefe hängt als Laternen-Linie im Brunnen und kommt von unten näher */
+function drawRecord() {
+  const rd = G.recordDepth; if (!rd || rd < 15 || G.tutorial || G.state === 'menu') return;
+  const y = REST_Y + (rd - G.depth) * PX_PER_M;
+  if (y > WORLD_H + 40 || y < -60 || rd - G.depth > BALANCE.record.markerWithinM + 0.6) return;
+  const pulse = 0.75 + 0.25 * Math.sin(G.time * 0.006), passed = G.depth >= rd;
+  ctx.save();
+  ctx.globalAlpha = passed ? 0.5 : 1;
+  ctx.strokeStyle = 'rgba(79,240,255,.55)'; ctx.lineWidth = 2; ctx.setLineDash([10, 8]);
+  ctx.beginPath(); ctx.moveTo(WALL_W + 4, y); ctx.lineTo(W - WALL_W - 4, y); ctx.stroke(); ctx.setLineDash([]);
+  for (const sd of [-1, 1]) {
+    const lx = sd < 0 ? WALL_W + 14 : W - WALL_W - 14;
+    vfx.glow(ctx, lx, y, 46, '#E2283C', 0.55 * pulse);
+    ctx.fillStyle = PAL.iron; ctx.fillRect(lx - 7, y - 16, 14, 4);
+    ctx.fillStyle = '#E2283C'; ctx.beginPath(); ctx.ellipse(lx, y, 7, 11, 0, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle = '#FFE2A8'; ctx.beginPath(); ctx.ellipse(lx, y + 1, 3, 5, 0, 0, Math.PI*2); ctx.fill();
+  }
+  ctx.font = `16px 'Russo One', 'Bungee', Impact, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+  ctx.lineWidth = 4; ctx.strokeStyle = 'rgba(5,7,15,.85)'; const lbl = 'REKORD ' + rd + ' m';
+  ctx.strokeText(lbl, W/2, y - 8); ctx.fillStyle = '#4FF0FF'; ctx.fillText(lbl, W/2, y - 8);
   ctx.restore();
 }
 function drawGridHints() {
@@ -1534,46 +1683,39 @@ function drawGridHints() {
   for (const [c, r] of CELLS) { ctx.beginPath(); ctx.arc(colX(c), rowY(r), 3, 0, Math.PI*2); ctx.fill(); }
 }
 function drawVignette() {
-  if (G.vignette > 0) {
-    const vg = ctx.createRadialGradient(W/2, WORLD_H/2, WORLD_H*0.25, W/2, WORLD_H/2, WORLD_H*0.75);
-    vg.addColorStop(0, 'rgba(226,40,60,0)'); vg.addColorStop(1, `rgba(226,40,60,${0.5*G.vignette})`);
-    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, WORLD_H);
-  }
-  if (!N.barrel && G.state === 'play') { // subtle permanent danger edge in pure-ninja form
-    const vg = ctx.createRadialGradient(W/2, WORLD_H/2, WORLD_H*0.4, W/2, WORLD_H/2, WORLD_H*0.8);
-    vg.addColorStop(0, 'rgba(226,40,60,0)'); vg.addColorStop(1, 'rgba(226,40,60,.13)');
-    ctx.fillStyle = vg; ctx.fillRect(0, 0, W, WORLD_H);
-  }
+  // Puls-Vignette + Flash kommen aus vfx.drawScreen(); hier nur der dauerhafte Rand in Ninja-Form (vorgerendert)
+  if (!N.barrel && G.state === 'play') ctx.drawImage(LAYERS.edge, 0, 0, W, WORLD_H);
 }
 
 function render() {
   ctx.save();
-  if (G.shake > 0) { const s = G.shakeAmp || 4; ctx.translate(rand(-s, s), rand(-s, s)); }
+  vfx.applyShake(ctx);            // abklingender Trauma-Shake (Modul), Reduced Motion → aus
   drawBackground();
   drawLanterns();
   drawSideWalls();
+  vfx.drawWall(ctx);              // Wandrisse/Löcher (Krabbler, Pflanzen)
   drawDust();
   drawGridHints();
   drawCoins();
+  drawRecord();
   drawEnts();
+  ea.drawCorpses(ctx);            // Treffer-/Tod-Animationen (Leichen-Pool)
   drawRope();
   for (const e of G.ents) if (e.type === 'seilschneider') drawCutter(e);
   drawNinja();
-  drawFx();
-  drawParticles();
+  vfx.draw(ctx);                  // Hieb-Trails, Partikel, Treffer-Flashes, Seilenden
   drawFog();
   drawTexts();
   ctx.restore();
   drawVignette();
-  if (G.flash > 0) { ctx.fillStyle = `rgba(255,255,255,${G.flash*0.5})`; ctx.fillRect(0, 0, W, WORLD_H); }
+  vfx.drawScreen(ctx, W, WORLD_H);
 }
 
 /* ===================================================================== AMBIENT (lanterns, dust) */
 function ambient(dtMs, scrollDy) {
-  for (const d of G.deco) d.y -= scrollDy;
-  G.deco = G.deco.filter(d => d.y > -160);
+  let nd = 0; for (const d of G.deco) { d.y -= scrollDy; if (d.y > -160) G.deco[nd++] = d; } G.deco.length = nd;   // in-place statt filter()
   while (G.deco.length < 4) {
-    const lastY = G.deco.length ? Math.max(...G.deco.map(d => d.y)) : 60;
+    let lastY = 60; if (G.deco.length) { lastY = -Infinity; for (const d of G.deco) if (d.y > lastY) lastY = d.y; }
     const lastSide = G.deco.length ? G.deco[G.deco.length-1].side : 1;
     G.deco.push({ side: -lastSide, y: lastY + rand(260, 420), seed: Math.random()*10 });
   }
@@ -1581,16 +1723,11 @@ function ambient(dtMs, scrollDy) {
   while (G.dust.length < 40) G.dust.push({ x: rand(WALL_W, W - WALL_W), y: rand(0, WORLD_H), vy: rand(-14, -4), vx: rand(-4, 4), r: rand(0.7, 2), a: rand(0.2, 0.6), ember: Math.random() < 0.3 });
   for (const d of G.dust) { d.y += d.vy*dt - scrollDy*0.4; d.x += d.vx*dt + Math.sin(G.time*0.001 + d.r*9)*0.1; if (d.y < -5) { d.y = WORLD_H + 5; d.x = rand(WALL_W, W - WALL_W); } }
 }
-function updateFx(dtMs) {
-  const dt = dtMs / 1000;
-  for (const p of G.particles) { p.x += p.vx*dt; p.y += p.vy*dt; p.vy += (p.g ?? 600)*dt; if (p.vr) p.rot += p.vr*dt; p.life -= dtMs; }
-  G.particles = G.particles.filter(p => p.life > 0);
-  for (const f of G.fx) f.t += dtMs; G.fx = G.fx.filter(f => f.t < f.life);
-  for (const t of G.texts) t.t += dtMs; G.texts = G.texts.filter(t => t.t < t.life);
+function updateFx(dtMs) {   // Partikel/Hiebe laufen im VFX-Pool (vfx.update); hier nur noch Score-Texte, in-place
+  let n = 0; for (const t of G.texts) { t.t += dtMs; if (t.t < t.life) G.texts[n++] = t; } G.texts.length = n;
 }
-function burst(x, y, n, cols, sp) {
-  for (let i=0;i<n;i++) { const a = rand(0, Math.PI*2), s = rand(sp*0.3, sp);
-    G.particles.push({ x, y, vx:Math.cos(a)*s, vy:Math.sin(a)*s - 40, r:rand(1.6, 3.8), life:rand(350, 650), max:650, c:pick(cols), g:500 }); }
+function burst(x, y, n, cols, sp) {   // Funken-/Splitter-Burst → Partikel-Pool des VFX-Moduls (nur Palettenfarben)
+  vfx.emit(x, y, n, { kind:'dot', colors:cols, speed:[sp*0.3, sp], life:[350, 650], size:[1.6, 3.8], g:500, vy:-40 });
 }
 
 /* ===================================================================== COINS */
@@ -1602,13 +1739,13 @@ function updateCoins(dtMs, dy) {
     if (!c.done && Math.hypot(N.x - c.x, N.y - c.y) < bodyR() + 12) {
       c.done = true; G.coinsRun++; Store.data.coins++;
       AudioMgr.play('score_pickup'); burst(c.x, c.y, 6, ['#FFE2A8','#FFB347'], 120);
-      if (c.chain) { G.chainGot = G.chainGot || {}; G.chainGot[c.chain] = (G.chainGot[c.chain] || 0) + 1;
-        if (G.chainGot[c.chain] === cc.chainLength) { G.coinsRun += cc.chainBonusCoins; Store.data.coins += cc.chainBonusCoins;
+      if (c.chain) { G.chainGot[c.chain] = (G.chainGot[c.chain] || 0) + 1;
+        if (G.chainGot[c.chain] === cc.chainLength) { G.coinsRun += cc.chainBonusCoins; Store.data.coins += cc.chainBonusCoins; Missions.add('chain');
           G.texts.push({ x:c.x, y:c.y - 20, txt:'Kette! +' + cc.chainBonusCoins, t:0, life:1000, col:'#FFB347' }); } }
     }
     if (c.y < -30) c.done = true;
   }
-  G.coins = G.coins.filter(c => !c.done);
+  let nc = 0; for (const c of G.coins) if (!c.done) G.coins[nc++] = c; G.coins.length = nc;
 }
 function cellCoin(c, r, life = 3500) { G.coins.push({ x:colX(c), y:rowY(r), fixed:true, life, t:0 }); }
 
@@ -1644,12 +1781,18 @@ function endTutorial() {
 
 /* ===================================================================== MAIN UPDATE */
 function update(dtMs) {
-  G.shake = Math.max(0, G.shake - dtMs); G.flash = Math.max(0, G.flash - dtMs/400); G.vignette = Math.max(0, G.vignette - dtMs/650);
   if (G.state === 'pause') return;
-  if (G.hitStop > 0) { G.hitStop -= dtMs; return; }       // hit-stop freezes the world for 40–60 ms
+  // Hit-Stop (40–60 ms) liegt im VFX-Modul; G.hitStop bleibt als externer Freeze (Tests/Debug) erhalten.
+  const ext = G.hitStop > 0, stopped = ext || vfx.frozen;
+  const wdt = vfx.update(dtMs, ext ? 0 : G.slowMo);        // Shake/Flash/Vignette klingen ab, Partikel nur wenn Welt läuft
+  ea.update(ext ? 0 : (wdt ?? dtMs * G.slowMo));           // Leichen altern mit Welt-dt
+  if (ext) { G.hitStop -= dtMs; return; }
+  if (stopped) return;
   const dt = dtMs * G.slowMo;
   updateFx(dt);
   if (G.state !== 'play') {
+    const go = BALANCE.gameOver;
+    const dt = G.state === 'dying' && performance.now() - G.overAt < go.slowMoMs ? dtMs * go.slowMoScale : dtMs;   // kurzer Todes-Moment
     const idle = G.state === 'dying' ? 0 : 30 * dt/1000;
     G.bgOff += idle; G.sideOff += idle; G.time += dt; ambient(dt, idle);
     if (G.state === 'dying') { const s = dt/1000; N.fall.vy += 1500*s; N.y += N.fall.vy*s; N.x += N.fall.vx*s; }
@@ -1657,20 +1800,25 @@ function update(dtMs) {
     return;
   }
   G.time += dt;
-  const sc = BALANCE.scroll, mps = G.tutorial ? BALANCE.tutorial.scrollMps : Math.min(sc.speedMps.max, sc.speedMps.start + sc.speedMps.perMeter*G.depth) * (N.barrel ? 1 : sc.noBarrelSpeedMult);
+  if (!G.tutorial) updateWave(dt);
+  const sc = BALANCE.scroll, mps = G.tutorial ? BALANCE.tutorial.scrollMps : Math.min(sc.speedMps.max, sc.speedMps.start + sc.speedMps.perMeter*G.depth) * (N.barrel ? 1 : sc.noBarrelSpeedMult)
+    * (G.wave.phase === 'rest' ? (BALANCE.waves.restScrollMult || 1) : 1);
   G.scrollPx = mps * PX_PER_M;
   const dy = G.scrollPx * dt / 1000, dm = dy / PX_PER_M;
   G.bgOff += dy; G.sideOff += dy; ambient(dt, dy);
   if (!G.tutorial) {
+    const prevM = Math.floor(G.depth);
     G.depth += dm;
-    G.scoreF += dm * BALANCE.score.pointsPerMeter * (N.barrel ? 1 : BALANCE.score.noBarrelScoreMult);
-    for (const ms of BALANCE.score.milestones) if (G.depth >= ms.m && !G.milestonesHit[ms.m]) {
-      G.milestonesHit[ms.m] = true; G.scoreF += ms.bonus; UI.toast(ms.m + ' m!  +' + ms.bonus); AudioMgr.play('ui_confirm'); Haptics.buzz([20,40,20]);
-    }
+    const base = dm * BALANCE.score.pointsPerMeter * (N.barrel ? 1 : BALANCE.score.noBarrelScoreMult);
+    const mult = BALANCE.score.combo.appliesToDepth ? G.combo.mult : 1;
+    G.scoreF += base * mult; G.parts.depth += base; G.parts.multBonus += base * (mult - 1);
+    if (Math.floor(G.depth) !== prevM) meterTick();
   }
   updateCoins(dt, dy);
   G.threats = computeThreats();
   updateNinja(dt);
+  { const nvy = (N.y - spLastY) / Math.max(0.001, dt / 1000); spLastY = N.y;
+    speed.update(dt, N.x, N.y, N.vx, nvy + G.scrollPx, !N.barrel); }
   checkSlashHits();
   decisionQueue(dt);
   G.slowMoReq = 1;
@@ -1680,8 +1828,41 @@ function update(dtMs) {
   AudioMgr.setLoop('rope_cutting_loop', G.ents.some(e => e.type === 'seilschneider' && e.state === 'cut' && !e.dead));
   if (!G.tutorial) AudioMgr.updateMusicForDepth(G.depth);   // debug flag (tests)
   tutorialUpdate(dt);
-  if (G.combo.streak && G.time - G.combo.lastAt > BALANCE.score.combo.windowMs) { G.combo.streak = 0; G.combo.mult = 1; }
+  comboDecay();
   UI.hud();
+}
+/* Wellen (v0.3): aktiv → Atempause. Während der Pause keine neuen Angriffe, Münzen kommen. */
+function updateWave(dt) {
+  const wv = BALANCE.waves, w = G.wave, m = G.depth, es = BALANCE.escalation, k = escSteps(m);
+  if (!wv) return;
+  if (!w.dur) { w.dur = stepVal(wv.activeMs, m) + k * es.waveActivePlusMs; w.surge = wv.surgeEvery && (w.idx + 1) % wv.surgeEvery === 0; }
+  w.t += dt;
+  if (w.t < w.dur) return;
+  if (w.phase === 'active') {
+    if (w.surge) addBonus(wv.surgeBonus, W/2, REST_Y - 150, 'WELLE ÜBERSTANDEN!', '#FFB347');
+    w.phase = 'rest'; w.t = 0; w.coinsGiven = false;
+    w.dur = Math.max(es.waveRestMinMs, stepVal(wv.restMs, m) - k * es.waveRestMinusMs) + (w.surge ? 1000 : 0);
+  } else {
+    w.phase = 'active'; w.t = 0; w.idx++; w.dur = 0;
+  }
+}
+/* Pro Meter: Meilensteine, Rekord-Jagd, Missionen */
+function meterTick() {
+  const m = Math.floor(G.depth), sc = BALANCE.score;
+  let bonus = 0;
+  for (const ms of sc.milestones) if (m >= ms.m && !G.milestonesHit[ms.m]) { G.milestonesHit[ms.m] = true; bonus = ms.bonus; }
+  const last = sc.milestones[sc.milestones.length - 1].m;
+  if (sc.milestoneEveryMAfter && m > last && (m - last) % sc.milestoneEveryMAfter === 0 && !G.milestonesHit[m]) { G.milestonesHit[m] = true; bonus = m * sc.milestoneBonusPerM; }
+  if (bonus) { const mu = G.combo.mult || 1, tot = Math.round(bonus * mu);   // (v0.3) Meilenstein × Combo → Combo halten lohnt sich
+    G.scoreF += tot; G.parts.milestones += bonus; G.parts.multBonus += tot - bonus; UI.toast(m + ' m!  +' + tot + (mu > 1 ? '  (x' + mu + ')' : '')); AudioMgr.play('ui_confirm'); Haptics.buzz([20,40,20]); }
+  // Rekord-Laterne überholt
+  if (G.recordDepth >= 15 && !G.recordHit && G.depth >= G.recordDepth) {
+    G.recordHit = true;
+    G.texts.push({ x:W/2, y:REST_Y - 120, txt:'NEUER REKORD!', t:0, life:1400, col:'#4FF0FF', size:30 });
+    burst(W/2, REST_Y, 22, ['#4FF0FF','#E2283C','#FFE2A8'], 300); vfx.screenFlash(0.25); AudioMgr.play('new_highscore', { vol:0.8 }); Haptics.buzz([30,40,30]);
+  }
+  Missions.runMax('depth', m);
+  if (!G.run.barrelLost) Missions.runMax('barrelDepth', m);
 }
 
 /* ===================================================================== UI */
@@ -1696,18 +1877,37 @@ const UI = {
     $('hud').classList.toggle('hidden', !(s === 'play' || s === 'pause' || s === 'dying'));
     if (s !== 'play' && s !== 'pause') this.tutHide();
     $('menuBest').textContent = Store.data.best; $('menuDepth').textContent = Store.data.bestDepth + ' m';
-    this._last = {}; if (s === 'play') this.hud();
+    this._last = {}; this._fill = -1; this._cls = ''; this._dc = null; if (s === 'play') this.hud();
+    if (s === 'menu') this.missions();
   },
+  _scoreAt:0, _fill:-1, _cls:'',
   hud() {
-    this.set('score', Math.floor(G.scoreF));
-    this.set('combo', G.combo.streak > 1 ? 'x' + G.combo.mult.toFixed(2).replace(/\.?0+$/, '') : '');
+    const now = performance.now();
+    if (now - this._scoreAt >= BALANCE.perf.hudUpdateMs || this._last.score === undefined) { this._scoreAt = now; this.set('score', Math.floor(G.scoreF)); }
+    this.set('combo', G.combo.mult > 1 ? 'x' + G.combo.mult : '');
+    const cls = 't' + G.combo.tier; if (cls !== this._cls) { this._cls = cls; $('combo').className = cls; }
+    // Combo-Abklingbalken (nur transform → kein Layout)
+    const f = G.combo.streak ? clamp(1 - (G.time - G.combo.lastAt) / comboWindow(), 0, 1) : 0, fq = Math.round(f * 50) / 50;
+    if (fq !== this._fill) { if ((this._fill <= 0) !== (fq <= 0)) $('comboBar').classList.toggle('hidden', fq <= 0); this._fill = fq; $('comboFill').style.transform = 'scaleX(' + fq + ')'; }
     this.set('depth', (G.tutorial ? 'Übung' : Math.floor(G.depth) + ' m'));
-    this.set('depthBest', 'Rekord ' + Store.data.bestDepth + ' m');
+    const rd = G.recordDepth, left = rd - G.depth;
+    let db = 'Rekord ' + Store.data.bestDepth + ' m', dc = '';
+    if (!G.tutorial && rd >= 15) { if (G.recordHit) { db = 'NEUER REKORD!'; dc = 'rec'; } else if (left <= BALANCE.record.hudCountdownWithinM) { db = 'noch ' + Math.ceil(left) + ' m bis Rekord'; dc = 'near'; } }
+    this.set('depthBest', db); if (dc !== this._dc) { this._dc = dc; $('depthBest').className = dc; }
     this.set('coins', G.coinsRun);
+    const cd = cutterActiveVisible(); if (cd !== this._cd) { this._cd = cd; $('hudCenter').classList.toggle('dim', cd); }   // Seilschneider nie hinter der Tiefenanzeige
     this.set('barrelTxt', N.barrel ? 'Fass' : 'Ninja');
-    $('bicon').classList.toggle('off', !N.barrel);
+    if (this._last.bicon !== N.barrel) { this._last.bicon = N.barrel; $('bicon').classList.toggle('off', !N.barrel); }
   },
-  showOver(score, best, isNew, depth, coins, reason) {
+  comboPop() { const el = $('combo'); el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); clearTimeout(this._cp); this._cp = setTimeout(() => el.classList.remove('pop'), 140); },
+  missions() { Missions.render($('menuMissions')); $('menuCoins').textContent = Store.data.coins; },
+  showOver(score, best, isNew, depth, coins, reason, prevBestDepth) {
+    const ch = $('overChase'), gap = (prevBestDepth || 0) - depth;
+    let txt = '';
+    if (depth > (prevBestDepth || 0) && prevBestDepth >= 15) txt = 'Neuer Tiefen-Rekord: ' + depth + ' m!';
+    else if (prevBestDepth >= 15 && depth >= prevBestDepth * BALANCE.record.chaseHintPct) txt = 'Nur noch ' + Math.max(1, Math.ceil(gap)) + ' m bis zum Rekord!';
+    ch.textContent = txt; ch.classList.toggle('hidden', !txt);
+    Missions.render($('overMissions'));
     $('overScore').textContent = score; $('overBest').textContent = best; $('overDepth').textContent = depth + ' m'; $('overCoins').textContent = coins;
     $('overReason').textContent = reason === 'rope' ? 'Das Seil wurde durchgeschnitten!' : 'Erwischt – ohne Fass ist ein Treffer tödlich.';
     $('newBest').classList.toggle('hidden', !isNew);
@@ -1725,6 +1925,7 @@ function setState(s) { G.state = s; UI.show(s); }
 function startGame(forceTutorial) {
   AudioMgr.unlock();
   const tut = forceTutorial || (BALANCE.tutorial.firstRunOnly && !Store.data.tutorialDone);
+  Missions.refresh();
   resetRun(tut);
   setState('play');
   if (tut) { UI.tutText(BALANCE.tutorial.steps[0].text); $('tutSkip').classList.toggle('hidden', !BALANCE.tutorial.skippable); }
@@ -1736,31 +1937,52 @@ function togglePause() {
 }
 
 /* ===================================================================== INPUT
-   Swipe anywhere: only the direction counts. No diagonals: dominant axis only. */
+   Swipe anywhere: only the dominant axis counts (no diagonals; corners = two swipes). */
 let sw = null;
 function classify(dx, dy) {
-  const a = Math.atan2(dy, dx) * 180 / Math.PI, sec = BALANCE.grid.diagonalSectorDeg;
-  // no diagonal swipes (user wish): only the dominant axis counts; corners = two swipes in a row
-  return Math.abs(dx) > Math.abs(dy) ? [Math.sign(dx), 0] : [0, Math.sign(dy)];
+  // keine Diagonalen: nur die dominante Achse zählt (45° → horizontal = Angriff); Ecken = zwei Wischer
+  return Math.abs(dx) * (BALANCE.grid.axisBiasHorizontal || 1) >= Math.abs(dy) ? [Math.sign(dx), 0] : [0, Math.sign(dy)];
 }
+function overReady() { const ok = G.state === 'over' && G.overShownAt != null && performance.now() - G.overShownAt >= BALANCE.gameOver.inputLockAfterCardMs;
+  if (ok) $('over').classList.remove('lock'); return ok; }
 function onDown(e) {
   if (e.target.closest && e.target.closest('button')) return;
   if (e.cancelable) e.preventDefault();
   AudioMgr.unlock();
-  sw = { id:e.pointerId, x:e.clientX, y:e.clientY, t:performance.now(), lastDir:null, lastAt:0 };
+  if (overReady()) { AudioMgr.play('ui_confirm'); startGame(); sw = null; return; }   // Tippen/Wischen irgendwo = nochmal
+  const t = e.timeStamp || performance.now();
+  sw = { id:e.pointerId, ox:e.clientX, oy:e.clientY, ot:t, ax:e.clientX, ay:e.clientY, lx:e.clientX, ly:e.clientY, lt:t, lastDir:null, fired:0 };
+}
+function swStep(x, y, t) {
+  const g = BALANCE.grid;
+  // Finger ruht → neuer Anker (langsame Wischer funktionieren, gleiche Richtung danach wieder erlaubt)
+  // (still = seit dem letzten Event >StillMs vergangen UND kaum bewegt – langsame/gedrosselte Geräte resetten nicht fälschlich)
+  const mv = Math.hypot(x - sw.lx, y - sw.ly), gap = t - sw.lt, still = gap > g.swipeAnchorResetStillMs && mv / gap < 0.015;   // < 15 px/s = Finger ruht
+  sw.lx = x; sw.ly = y; sw.lt = t;
+  if (still) { sw.ax = x; sw.ay = y; sw.lastDir = null; return; }
+  const dx = x - sw.ax, dy = y - sw.ay;
+  if (Math.hypot(dx, dy) < (sw.fired ? g.chainSwipeMinDp : g.swipeMinDp)) return;
+  const [cx, cy] = classify(dx, dy), k = cx + ',' + cy;
+  sw.ax = x; sw.ay = y;
+  if (k === sw.lastDir && g.sameDirNeedsPause) return;   // derselbe Strich läuft weiter → kein Doppel-Auslösen
+  input(cx, cy); sw.lastDir = k; sw.fired++;
 }
 function onMove(e) {
   if (!sw || e.pointerId !== sw.id) return;
-  const g = BALANCE.grid, dx = e.clientX - sw.x, dy = e.clientY - sw.y, now = performance.now();
-  if (Math.hypot(dx, dy) >= g.swipeMinDp) {
-    if (now - sw.t <= g.swipeMaxMs) {
-      const [cx, cy] = classify(dx, dy), k = cx + ',' + cy;
-      if (k !== sw.lastDir || now - sw.lastAt > 220) { input(cx, cy); sw.lastDir = k; sw.lastAt = now; }
-    }
-    sw.x = e.clientX; sw.y = e.clientY; sw.t = now;      // allow chaining several swipes in one stroke
-  } else if (now - sw.t > g.swipeMaxMs) { sw.x = e.clientX; sw.y = e.clientY; sw.t = now; }
+  const list = e.getCoalescedEvents ? e.getCoalescedEvents() : null;
+  if (list && list.length) { for (const p of list) swStep(p.clientX, p.clientY, p.timeStamp || e.timeStamp); }
+  else swStep(e.clientX, e.clientY, e.timeStamp || performance.now());
 }
-function onUp(e) { if (sw && e.pointerId === sw.id) sw = null; }
+function onUp(e) {
+  if (!sw || e.pointerId !== sw.id) return;
+  if (e.type === 'pointerup') {
+    swStep(e.clientX, e.clientY, e.timeStamp || performance.now());
+    const g = BALANCE.grid, dx = e.clientX - sw.ox, dy = e.clientY - sw.oy, dt = (e.timeStamp || performance.now()) - sw.ot;
+    // kurzer Flick, der unter der Schwelle blieb (oder dessen Move-Events fehlten) → trotzdem ein Wischer
+    if (!sw.fired && Math.hypot(dx, dy) >= g.flickFallbackMinDp && dt <= g.flickFallbackMaxMs) { const [cx, cy] = classify(dx, dy); input(cx, cy); }
+  }
+  sw = null;
+}
 stage.addEventListener('pointerdown', onDown, { passive:false });
 window.addEventListener('pointermove', onMove, { passive:true });
 window.addEventListener('pointerup', onUp); window.addEventListener('pointercancel', onUp);
@@ -1769,7 +1991,7 @@ window.addEventListener('keydown', e => {
   if (e.repeat) return;
   if (KEYMAP[e.code]) { e.preventDefault(); if (G.state === 'play') input(...KEYMAP[e.code]); return; }
   if (e.code === 'KeyP' || e.code === 'Escape') { togglePause(); return; }
-  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); if (G.state === 'menu' || (G.state === 'over' && performance.now() - G.overAt > 900)) startGame(); else if (G.state === 'pause') togglePause(); }
+  if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); if (G.state === 'menu' || overReady()) startGame(); else if (G.state === 'pause') togglePause(); }
 });
 document.addEventListener('touchmove', e => e.preventDefault(), { passive:false });
 document.addEventListener('gesturestart', e => e.preventDefault());
@@ -1779,7 +2001,7 @@ const CONFIRM_BTNS = ['playBtn', 'againBtn', 'resumeBtn', 'restartBtn'];
 const click = (id, fn) => $(id).addEventListener('click', e => { e.stopPropagation(); AudioMgr.unlock(); AudioMgr.play(CONFIRM_BTNS.includes(id) ? 'ui_confirm' : 'ui_click'); fn(); });
 click('playBtn', () => startGame());
 click('tutBtn', () => startGame(true));
-click('againBtn', () => startGame());
+click('againBtn', () => { if (overReady()) startGame(); });
 click('overMenuBtn', () => { setState('menu'); AudioMgr.setMusicTier(0); });
 click('pauseBtn', togglePause);
 click('resumeBtn', togglePause);
@@ -1792,16 +2014,31 @@ click('muteBtn', () => { Store.data.muted = !Store.data.muted; Store.save(); UI.
 let last = performance.now();
 function frame(now) {
   let dtMs = now - last; last = now;
-  if (dtMs > 50) dtMs = 50;
-  const steps = Math.ceil(dtMs / 8.4);
+  adaptQuality(dtMs, now);
+  if (dtMs > BALANCE.perf.maxDtMs) dtMs = BALANCE.perf.maxDtMs;
+  if (dtMs < 0) dtMs = 0;
+  const steps = Math.max(1, Math.ceil(dtMs / 8.4));
   for (let i=0;i<steps;i++) update(dtMs/steps);
+  if (G.state === 'dying' && !G.overShown && performance.now() - G.overAt >= BALANCE.gameOver.cardDelayMs) showOverNow();
+  if (G.state === 'over') overReady();   // Buttons nach der Sperre voll einblenden
   render();
   requestAnimationFrame(frame);
+}
+// adaptive Qualität: p95 Frame > downgradeP95Ms → DPR runter (lowDpr); später < upgradeP95Ms → wieder hoch
+const _sortBuf = new Float32Array(120);
+function adaptQuality(dt, now) {
+  if (document.hidden || dt > 250) return;
+  const Q = Quality; Q.dts[Q.n++ % 120] = dt;
+  if (Q.n % 120 !== 0 || now - Q.lastSwitch < 5000) return;
+  _sortBuf.set(Q.dts); _sortBuf.sort(); const p95 = _sortBuf[113], pf = BALANCE.perf;
+  if (!Q.low && p95 > pf.downgradeP95Ms && (window.devicePixelRatio || 1) > pf.lowDpr) { Q.low = true; Q.lastSwitch = now; resize(); }
+  else if (Q.low && p95 < pf.upgradeP95Ms) { Q.low = false; Q.lastSwitch = now; resize(); }
 }
 document.addEventListener('visibilitychange', () => { last = performance.now(); if (document.hidden) { if (G.state === 'play') togglePause(); AudioMgr.suspend(); } else if (AudioMgr.unlocked) AudioMgr.resume(); });
 // iOS: unlock/resume audio on the first (and any later) real user gesture
 ['touchend', 'pointerdown', 'keydown', 'click'].forEach(ev => document.addEventListener(ev, () => AudioMgr.unlock(), { capture:true, passive:true }));
-window.addEventListener('resize', () => { resize(); if (G.state !== 'play') { N.x = colX(0); } });
+const isLandscapeBlocked = () => window.matchMedia && matchMedia('(orientation:landscape) and (max-height:500px)').matches;
+window.addEventListener('resize', () => { resize(); if (G.state !== 'play') { N.x = colX(0); } else if (isLandscapeBlocked()) togglePause(); });
 window.addEventListener('orientationchange', () => setTimeout(resize, 200));
 
 /* App icon renderer (used to generate icons/*.png) */
@@ -1819,10 +2056,12 @@ function drawIcon(c, size) {
 resize(); resetRun(false); UI.updateMute(); setState('menu');
 if (document.fonts && document.fonts.load) { ['20px "Russo One"', '20px Bungee', '600 16px Rubik'].forEach(f => document.fonts.load(f).catch(() => {})); }
 requestAnimationFrame(frame);
-window.__bn = { G, N, BALANCE, input, spawnWall, spawnSpike, spawnCutter, startGame, setState, ninjaCell, colX, rowY, computeThreats, hurt, drawIcon, endTutorial, Store,
-  AudioMgr, AUDIO_EXTS, render, Loadout, get W() { return W; } };
+window.__bn = { G, N, BALANCE, input, spawnWall, spawnSpike, spawnCutter: (o = {}) => spawnCutter({ now:true, ...o }), startGame, setState, ninjaCell, colX, rowY, computeThreats, hurt, drawIcon, endTutorial, Store,
+  AudioMgr, AUDIO_EXTS, render, Loadout, vfx, ea, scarf, speed, Missions, Quality, fairOK, reachableInOneSwipe, activeAttacks, maxConcurrentNow, version: BUILD, get W() { return W; } };
+// balance.json (optional): Overrides werden tief in BALANCE gemergt (Schlüssel mit _ werden ignoriert)
+fetch('balance.json', { cache:'no-cache' }).then(r => r.ok ? r.json() : null).then(j => { if (j && typeof j === 'object') { deepMerge(BALANCE, j); ea.setBalance(BALANCE); } }).catch(() => {});
 
-if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(()=>{});
+if ('serviceWorker' in navigator && window.isSecureContext) navigator.serviceWorker.register('sw.js').catch(e => console.warn('SW-Registrierung fehlgeschlagen', e));
 })();
 </script>
 </body>
