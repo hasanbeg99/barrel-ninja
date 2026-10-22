@@ -173,7 +173,7 @@ const BALANCE = {
     returnDurationMs: 140,
     returnHoldIfRestCellThreatened: true,
     comboHoldSyncPct: 0.8,         // (impl.) 2nd axis input refreshes the other axis' hold to ≥ 80 % so corners are reachable
-    swipeMinDp: 28, swipeMaxMs: 260, diagonalSectorDeg: 30, inputBufferMs: 120
+    swipeMinDp: 28, swipeMaxMs: 260, diagonalSectorDeg: 0, inputBufferMs: 120
   },
   attack: { reachCells: 1, activeMs: 120, recoveryMs: { barrel: 160, noBarrel: 110 }, hitStopMs: 50 },
   scroll: { speedMps: { start: 0.8, perMeter: 0.0035, max: 2.2 }, noBarrelSpeedMult: 1.0 },
@@ -235,7 +235,7 @@ const BALANCE = {
     firstRunOnly: true, skippable: true, noDamageUntilMs: 30000, scrollMps: 0.6,
     steps: [
       { atMs: 0,     text: 'Wisch, um dich zu bewegen', spawn: 'coinsSides' },
-      { atMs: 4000,  text: 'Auch schräg!', spawn: 'coinsDiagonal' },
+      { atMs: 4000,  text: 'Ecken: zwei Wischer hintereinander', spawn: 'coinsDiagonal' },
       { atMs: 9000,  text: 'Wisch zum Gegner = Angriff', spawn: 'tutKrabbler', idleMs: 2000, windupMs: 1200, slowMo: 0.5, waitUntilKilled: true },
       { atMs: 14000, text: 'Stacheln: ausweichen', spawn: 'tutStacheln' },
       { atMs: 18500, text: 'Angreifen oder Reihe wechseln', spawn: 'tutFledermaus', windupMs: 1200 },
@@ -1736,11 +1736,11 @@ function togglePause() {
 }
 
 /* ===================================================================== INPUT
-   Swipe anywhere: only the direction counts. Diagonals within ±diagonalSectorDeg of 45°. */
+   Swipe anywhere: only the direction counts. No diagonals: dominant axis only. */
 let sw = null;
 function classify(dx, dy) {
   const a = Math.atan2(dy, dx) * 180 / Math.PI, sec = BALANCE.grid.diagonalSectorDeg;
-  for (const d of [45, 135, -45, -135]) if (Math.abs(((a - d + 540) % 360) - 180) <= sec) return [Math.sign(dx), Math.sign(dy)];
+  // no diagonal swipes (user wish): only the dominant axis counts; corners = two swipes in a row
   return Math.abs(dx) > Math.abs(dy) ? [Math.sign(dx), 0] : [0, Math.sign(dy)];
 }
 function onDown(e) {

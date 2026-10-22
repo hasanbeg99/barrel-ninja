@@ -1,7 +1,7 @@
 // Network-first service worker: always tries the fresh version, falls back to cache offline.
 // Audio: the page tells the worker which format this browser uses (ogg / m4a / mp3) and the worker
 // precaches exactly those files (SFX, ambience, all three music tiers), so the game works offline.
-const CACHE = 'barrel-ninja-v2';
+const CACHE = 'barrel-ninja-v2-nodiag';
 const ASSETS = ['./', './index.html', './manifest.json', './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png',
   './fonts/bungee-latin.woff2', './fonts/russo-one-latin.woff2', './fonts/rubik-latin.woff2', './audio/manifest.json'];
 self.addEventListener('install', e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).catch(()=>{})); self.skipWaiting(); });
