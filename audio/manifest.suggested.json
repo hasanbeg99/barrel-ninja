@@ -1,0 +1,119 @@
+{
+ "_info": "VORSCHLAG (nicht aktiv). Zum Aktivieren den Block 'files' nach manifest.json übernehmen. m4a läuft auf iOS, Android und Desktop; .ogg/.mp3 liegen als Alternativen daneben. cutTick bleibt beim Synth-Fallback (rope_cutting_loop ist ein Loop, kein Einzel-Tick).",
+ "files": {
+  "swipe": {
+   "src": "swipe.m4a",
+   "volume": 0.55
+  },
+  "slash": {
+   "src": "sword_slash.m4a",
+   "volume": 0.9
+  },
+  "kill": {
+   "src": "enemy_death.m4a",
+   "volume": 0.8
+  },
+  "warn": {
+   "src": "warning.m4a",
+   "volume": 0.75
+  },
+  "barrelBreak": {
+   "src": "barrel_break.m4a",
+   "volume": 0.85
+  },
+  "pickup": {
+   "src": "score_pickup.m4a",
+   "volume": 0.45
+  },
+  "ropeSnap": {
+   "src": "rope_snap.m4a",
+   "volume": 0.85
+  },
+  "gameOver": {
+   "src": "game_over.m4a",
+   "volume": 0.8
+  },
+  "uiClick": {
+   "src": "ui_click.m4a",
+   "volume": 0.5
+  },
+  "music": {
+   "src": "music_calm_loop.m4a",
+   "volume": 0.5
+  }
+ },
+ "extra_sounds_need_code_hooks": {
+  "rope_retract": {
+   "src": "rope_retract.m4a",
+   "volume": 0.5,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "rope_extend": {
+   "src": "rope_extend.m4a",
+   "volume": 0.5,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "rope_creak": {
+   "src": "rope_creak.m4a",
+   "volume": 0.4,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "enemy_hit": {
+   "src": "enemy_hit.m4a",
+   "volume": 0.85,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "player_hit": {
+   "src": "player_hit.m4a",
+   "volume": 0.9,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "barrel_pickup": {
+   "src": "barrel_pickup.m4a",
+   "volume": 0.7,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "rope_cutting_loop": {
+   "src": "rope_cutting_loop.m4a",
+   "volume": 0.55,
+   "loop": true,
+   "loopEnd_s": 1.5
+  },
+  "ui_confirm": {
+   "src": "ui_confirm.m4a",
+   "volume": 0.6,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "new_highscore": {
+   "src": "new_highscore.m4a",
+   "volume": 0.8,
+   "loop": false,
+   "loopEnd_s": null
+  },
+  "ambience_well_loop": {
+   "src": "ambience_well_loop.m4a",
+   "volume": 0.6,
+   "loop": true,
+   "loopEnd_s": 24.0
+  },
+  "music_mid_loop": {
+   "src": "music_mid_loop.m4a",
+   "volume": 0.5,
+   "loop": true,
+   "loopEnd_s": 76.8
+  },
+  "music_fast_loop": {
+   "src": "music_fast_loop.m4a",
+   "volume": 0.5,
+   "loop": true,
+   "loopEnd_s": 71.111
+  }
+ }
+}

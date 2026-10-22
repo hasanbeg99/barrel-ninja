@@ -1,0 +1,103 @@
+{
+ "_info": "Aktive Sound-Zuordnung für den AudioManager. Schlüssel = Sound-Name im Code. 'src' ohne Endung: das Spiel wählt automatisch .ogg → .m4a → .mp3 (je nach Browser). 'src' mit Endung erzwingt genau diese Datei. 'volume' 0–1, 'loopEnd' in Sekunden (wegen ~12 ms AAC-Padding bei m4a). Fehlt ein Eintrag oder lässt sich eine Datei nicht laden, spielt der eingebaute WebAudio-Synth. Vorschlag des Sounddesigns siehe manifest.suggested.json.",
+ "files": {
+  "swipe": {
+   "src": "swipe",
+   "volume": 0.55
+  },
+  "rope_retract": {
+   "src": "rope_retract",
+   "volume": 0.5
+  },
+  "rope_extend": {
+   "src": "rope_extend",
+   "volume": 0.5
+  },
+  "rope_creak": {
+   "src": "rope_creak",
+   "volume": 0.4
+  },
+  "sword_slash": {
+   "src": "sword_slash",
+   "volume": 0.9
+  },
+  "enemy_hit": {
+   "src": "enemy_hit",
+   "volume": 0.85
+  },
+  "enemy_death": {
+   "src": "enemy_death",
+   "volume": 0.8
+  },
+  "player_hit": {
+   "src": "player_hit",
+   "volume": 0.9
+  },
+  "barrel_break": {
+   "src": "barrel_break",
+   "volume": 0.9
+  },
+  "barrel_pickup": {
+   "src": "barrel_pickup",
+   "volume": 0.7
+  },
+  "warning": {
+   "src": "warning",
+   "volume": 0.75
+  },
+  "rope_cutting_loop": {
+   "src": "rope_cutting_loop",
+   "volume": 0.55,
+   "loop": true,
+   "loopEnd": 1.5
+  },
+  "rope_snap": {
+   "src": "rope_snap",
+   "volume": 0.85
+  },
+  "ui_click": {
+   "src": "ui_click",
+   "volume": 0.6
+  },
+  "ui_confirm": {
+   "src": "ui_confirm",
+   "volume": 0.6
+  },
+  "score_pickup": {
+   "src": "score_pickup",
+   "volume": 0.45
+  },
+  "game_over": {
+   "src": "game_over",
+   "volume": 0.8
+  },
+  "new_highscore": {
+   "src": "new_highscore",
+   "volume": 0.8
+  },
+  "ambience_well_loop": {
+   "src": "ambience_well_loop",
+   "volume": 0.6,
+   "loop": true,
+   "loopEnd": 24.0
+  },
+  "music_calm_loop": {
+   "src": "music_calm_loop",
+   "volume": 0.5,
+   "loop": true,
+   "loopEnd": 76.8
+  },
+  "music_mid_loop": {
+   "src": "music_mid_loop",
+   "volume": 0.5,
+   "loop": true,
+   "loopEnd": 76.8
+  },
+  "music_fast_loop": {
+   "src": "music_fast_loop",
+   "volume": 0.5,
+   "loop": true,
+   "loopEnd": 71.111
+  }
+ }
+}

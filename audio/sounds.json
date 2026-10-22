@@ -1,0 +1,178 @@
+{
+ "swipe": {
+  "duration_s": 0.24,
+  "loop": false,
+  "volume": 0.55,
+  "lufs": -16.1,
+  "true_peak_dbtp": -1.67,
+  "desc": "Wischgeste: kurzes, aufsteigendes Luftrauschen"
+ },
+ "rope_retract": {
+  "duration_s": 0.42,
+  "loop": false,
+  "volume": 0.5,
+  "lufs": -16.0,
+  "true_peak_dbtp": -2.08,
+  "desc": "Seil einziehen: Reibung/Fasern steigend, kleiner Holz-Stopp"
+ },
+ "rope_extend": {
+  "duration_s": 0.5,
+  "loop": false,
+  "volume": 0.5,
+  "lufs": -16.4,
+  "true_peak_dbtp": -1.59,
+  "desc": "Seil verlängern: Reibung fallend, kurze Spannungs-Knarz am Ende"
+ },
+ "rope_creak": {
+  "duration_s": 0.75,
+  "loop": false,
+  "volume": 0.4,
+  "lufs": -17.0,
+  "true_peak_dbtp": -4.89,
+  "desc": "Seil knarzt/spannt sich (Stick-Slip-Reibung)"
+ },
+ "sword_slash": {
+  "duration_s": 0.48,
+  "loop": false,
+  "volume": 0.9,
+  "lufs": -14.7,
+  "true_peak_dbtp": -1.5,
+  "desc": "Katana-Hieb: Whoosh + metallisches 'Shing'"
+ },
+ "enemy_hit": {
+  "duration_s": 0.32,
+  "loop": false,
+  "volume": 0.85,
+  "lufs": -15.1,
+  "true_peak_dbtp": -1.79,
+  "desc": "Treffer am Gegner: dumpfer Schlag + Knack"
+ },
+ "enemy_death": {
+  "duration_s": 0.75,
+  "loop": false,
+  "volume": 0.8,
+  "lufs": -15.0,
+  "true_peak_dbtp": -3.08,
+  "desc": "Gegner besiegt: Treffer + absteigendes Zerfallen/Krümel"
+ },
+ "player_hit": {
+  "duration_s": 0.5,
+  "loop": false,
+  "volume": 0.9,
+  "lufs": -15.3,
+  "true_peak_dbtp": -1.78,
+  "desc": "Spieler/Fass getroffen: Holz-Wumms + dissonanter Stich"
+ },
+ "barrel_break": {
+  "duration_s": 0.9,
+  "loop": false,
+  "volume": 0.85,
+  "lufs": -16.4,
+  "true_peak_dbtp": -1.5,
+  "desc": "Holzfass zerplatzt: Krachen, Splitter, Eisenreifen"
+ },
+ "barrel_pickup": {
+  "duration_s": 0.55,
+  "loop": false,
+  "volume": 0.7,
+  "lufs": -16.0,
+  "true_peak_dbtp": -3.56,
+  "desc": "Fass wieder aufgenommen: Holz-'Tonk' + aufsteigende Marimba"
+ },
+ "warning": {
+  "duration_s": 0.75,
+  "loop": false,
+  "volume": 0.75,
+  "lufs": -15.2,
+  "true_peak_dbtp": -3.6,
+  "desc": "Telegraph/Gefahr: Taiko 'ka-DON' + leiser Gong-Glanz"
+ },
+ "rope_cutting_loop": {
+  "duration_s": 1.5,
+  "loop": true,
+  "volume": 0.55,
+  "lufs": -18.0,
+  "true_peak_dbtp": -2.99,
+  "desc": "Seilschneider schneidet (nahtloser Loop, 1,5 s)"
+ },
+ "rope_snap": {
+  "duration_s": 0.8,
+  "loop": false,
+  "volume": 0.85,
+  "lufs": -15.6,
+  "true_peak_dbtp": -1.79,
+  "desc": "Seil reißt: Knall, Fasern, Rückschnell-Twang, Whoosh"
+ },
+ "ui_click": {
+  "duration_s": 0.07,
+  "loop": false,
+  "volume": 0.5,
+  "lufs": -18.9,
+  "true_peak_dbtp": -1.79,
+  "desc": "UI-Klick: kurzer Holzblock"
+ },
+ "ui_confirm": {
+  "duration_s": 0.4,
+  "loop": false,
+  "volume": 0.6,
+  "lufs": -16.0,
+  "true_peak_dbtp": -4.59,
+  "desc": "UI-Bestätigung: zwei Töne aufwärts (E5-A5)"
+ },
+ "score_pickup": {
+  "duration_s": 0.42,
+  "loop": false,
+  "volume": 0.45,
+  "lufs": -16.0,
+  "true_peak_dbtp": -5.14,
+  "desc": "Punkte/Pickup: glockiges 'Ting-ting' (E6-B6)"
+ },
+ "game_over": {
+  "duration_s": 2.6,
+  "loop": false,
+  "volume": 0.8,
+  "lufs": -15.2,
+  "true_peak_dbtp": -5.0,
+  "desc": "Game Over: absteigende In-Skala, Koto + Shakuhachi"
+ },
+ "new_highscore": {
+  "duration_s": 1.9,
+  "loop": false,
+  "volume": 0.8,
+  "lufs": -15.2,
+  "true_peak_dbtp": -2.29,
+  "desc": "Neuer Highscore: aufsteigende Yo-Skala, Taiko, Glocken"
+ },
+ "ambience_well_loop": {
+  "duration_s": 24.0,
+  "loop": true,
+  "volume": 0.6,
+  "lufs": -24.0,
+  "true_peak_dbtp": -10.31,
+  "desc": "Brunnen-Atmo: Wind, Tropfen, tiefer Hall (24 s Loop, stereo)"
+ },
+ "music_calm_loop": {
+  "duration_s": 76.8,
+  "loop": true,
+  "volume": 0.5,
+  "lufs": -18.0,
+  "true_peak_dbtp": -6.18,
+  "desc": "Musik Stufe 1 (ruhig): 75 BPM, Koto + Shakuhachi, kaum Percussion (76,8 s Loop, stereo)"
+ },
+ "music_mid_loop": {
+  "duration_s": 76.8,
+  "loop": true,
+  "volume": 0.5,
+  "lufs": -18.0,
+  "true_peak_dbtp": -3.44,
+  "desc": "Musik Stufe 2 (mittel): 100 BPM, Shamisen-Puls, leichte Taiko (76,8 s Loop, stereo)"
+ },
+ "music_fast_loop": {
+  "duration_s": 71.111,
+  "loop": true,
+  "volume": 0.5,
+  "lufs": -18.0,
+  "true_peak_dbtp": -3.46,
+  "desc": "Musik Stufe 3 (schnell): 135 BPM, treibende Taiko, Shamisen, Motiv (71,1 s Loop, stereo)"
+ }
+}
